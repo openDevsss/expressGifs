@@ -10,11 +10,11 @@ const port = process.env.PORT;
 const app: Express = express();
 app.use(express.json());
 
-app.post("/signup", createUser);
-app.post("/signin", loginUser);
+app.post("/sign-up", createUser);
+app.post("/sign-in", loginUser);
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log("Connection has been established successfully.");
   })

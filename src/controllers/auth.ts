@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
+import { NotFoundError } from "../utils/errors/not-found-err";
 
 export const createUser: RequestHandler = async (req, res, next) => {
   const { nickname, password, email } = req.body;
@@ -35,15 +36,17 @@ export const loginUser: RequestHandler = async (req, res, next) => {
         {
           id: user.id,
           email: user.email,
+          nickname: user.nickname,
         },
         "secret-key"
       );
       const { password, ...userData } = user.dataValues;
       res.send({ token, ...userData });
     } else {
-      return "Проверьте пароль";
+      return next(new NotFoundError("Проверьте пароль"));
     }
   } else {
-    return "err";
+    return next(new NotFoundError("Проверьте введенные данные"));
   }
+  return next();
 };
