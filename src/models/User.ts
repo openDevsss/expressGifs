@@ -32,13 +32,19 @@ export class User extends Model {
     type: DataType.STRING,
     allowNull: false,
   })
-  nickName!: string;
+  nickname!: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   email!: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  password!: string;
 
   @Column({
     type: DataType.STRING,
