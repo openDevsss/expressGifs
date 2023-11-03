@@ -13,7 +13,9 @@ import {
   DataType,
   PrimaryKey,
   AutoIncrement,
+  ForeignKey,
 } from "sequelize-typescript";
+import { Role } from "./Role";
 
 @Table({
   timestamps: true,
@@ -56,7 +58,7 @@ export class User extends Model {
   avatar!: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.BOOLEAN,
     allowNull: false,
     defaultValue: false,
   })

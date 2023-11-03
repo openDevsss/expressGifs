@@ -1,7 +1,6 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import { sequelize } from "./config/connect";
-import router from "./routes/User";
 import { createUser, loginUser } from "./controllers/auth";
 
 dotenv.config();

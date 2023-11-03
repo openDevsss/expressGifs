@@ -5,10 +5,11 @@ import { User } from "../models/User";
 import { NotFoundError } from "../utils/errors/not-found-err";
 
 export const createUser: RequestHandler = async (req, res, next) => {
-  const { nickname, password, email } = req.body;
+  const { nickname, password, email, role_id } = req.body;
   try {
     let hashPassword = await bcrypt.hash(password, 12);
     const user = await User.create({
+      role_id,
       nickname,
       email,
       password: hashPassword,
