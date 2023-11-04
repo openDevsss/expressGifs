@@ -14,6 +14,7 @@ import {
   PrimaryKey,
   AutoIncrement,
   ForeignKey,
+  BelongsTo,
 } from "sequelize-typescript";
 import { Role } from "./Role";
 
@@ -63,4 +64,11 @@ export class User extends Model {
     defaultValue: false,
   })
   isSuccess!: boolean;
+
+  @ForeignKey(() => Role)
+  @Column
+  role_id!: number;
+
+  @BelongsTo(() => Role)
+  Role!: Role;
 }

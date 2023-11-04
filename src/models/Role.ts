@@ -22,4 +22,10 @@ export class Role extends Model {
     allowNull: true,
   })
   readonly id!: number;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  name!: string;
 }

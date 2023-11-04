@@ -13,7 +13,7 @@ app.post("/sign-up", createUser);
 app.post("/sign-in", loginUser);
 
 sequelize
-  .sync()
+  .sync({ force: true })
   .then(() => {
     console.log("Connection has been established successfully.");
   })
