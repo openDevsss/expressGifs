@@ -30,7 +30,7 @@ export class User extends Model {
     type: DataType.BIGINT,
     allowNull: true,
   })
-  readonly id!: bigint;
+  id!: bigint;
 
   @Column({
     type: DataType.STRING,

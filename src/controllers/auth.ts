@@ -21,8 +21,6 @@ export const createUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-// need add
-
 export const loginUser: RequestHandler = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({
