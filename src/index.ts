@@ -1,19 +1,23 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import { sequelize } from "./config/connect";
+import router from "./routes/User";
 import { createUser, loginUser } from "./controllers/auth";
+import cors from "cors";
 
 dotenv.config();
 
 const port = process.env.PORT;
 const app: Express = express();
+
+app.use(cors());
 app.use(express.json());
 
 app.post("/sign-up", createUser);
 app.post("/sign-in", loginUser);
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log("Connection has been established successfully.");
   })
