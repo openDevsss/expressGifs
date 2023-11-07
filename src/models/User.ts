@@ -16,8 +16,10 @@ import {
   ForeignKey,
   BelongsTo,
   HasOne,
+  HasMany,
 } from "sequelize-typescript";
 import { Role } from "./Role";
+import { Gif } from "./Gif";
 
 @Table({
   timestamps: true,
@@ -72,4 +74,7 @@ export class User extends Model {
     defaultValue: 2,
   })
   role_id!: number;
+
+  @HasMany(() => Gif)
+  gif!: Gif[];
 }
