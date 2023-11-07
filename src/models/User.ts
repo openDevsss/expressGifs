@@ -76,5 +76,5 @@ export class User extends Model {
   role_id!: number;
 
   @HasMany(() => Gif)
-  gif!: Gif[];
+  gif!: Gif;
 }

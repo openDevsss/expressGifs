@@ -14,6 +14,5 @@ const sequelize = new Sequelize({
 sequelize.addModels([Role, User, Gif]);
 
 export const initDb = async () => {
-  await sequelize.authenticate();
-  await sequelize.sync({ alter: true });
+  await sequelize.sync();
 };

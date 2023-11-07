@@ -1,6 +1,6 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
-import router from "./routes/User";
+import { router } from "./routes/index";
 import { createUser, loginUser } from "./controllers/Auth";
 import cors from "cors";
 import { User } from "./models/User";
