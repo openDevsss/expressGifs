@@ -1,8 +1,13 @@
 import { RequestHandler } from "express";
 import { Gif } from "../models/Gif";
+import { User } from "../models/User";
 
 export const getAllGifs: RequestHandler = (req, res, next) => {
-  Gif.findAll({})
+  Gif.findAll({
+    include: [
+      { model: User, attributes: ["nickname", "id", "avatar", "email"] },
+    ],
+  })
     .then((gifs) => {
       res.json(gifs);
     })
@@ -37,14 +42,12 @@ export const createGif: RequestHandler = async (req, res, next) => {
     console.log(err);
   }
 };
-// FIXME: НЕ РАБОТАЕТ
-export const getCurrentUserGifs: RequestHandler = async (req, res, next) => {
-  const currentUser = req.user;
-  console.log("jh");
-  console.log(currentUser);
+
+export const getGifsCurrentUser: RequestHandler = async (req, res, next) => {
+  const { id: currentUserId } = req.user;
   try {
     const gifs = await Gif.findAll({
-      where: { userId: currentUser.id },
+      include: [{ model: User, where: { id: currentUserId } }],
     });
     res.json(gifs);
   } catch (err) {
