@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { Gif } from "../models/Gif";
 import { User } from "../models/User";
+import { TagGifs } from "../models/TagGifs";
 
 export const getAllGifs: RequestHandler = (req, res, next) => {
   Gif.findAll({
@@ -27,15 +28,15 @@ export const getGifById: RequestHandler = async (req, res, next) => {
 };
 
 export const createGif: RequestHandler = async (req, res, next) => {
-  console.log("dasdas");
-  const { title, description, url } = req.body;
-  const currentUser = req.user;
+  const { title, description, url, tags } = req.body;
+  const { id } = req.user;
   try {
     const createdGif = await Gif.create({
       title,
       description,
       url,
-      userId: currentUser.id,
+      tags,
+      userId: id,
     });
     res.json(createdGif);
   } catch (err) {

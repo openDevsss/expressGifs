@@ -7,8 +7,12 @@ import {
   AutoIncrement,
   ForeignKey,
   BelongsTo,
+  BelongsToMany,
+  HasMany,
 } from "sequelize-typescript";
 import { User } from "./User";
+import { Tag } from "./Tag";
+import { TagGifs } from "./TagGifs";
 
 @Table({
   timestamps: true,
@@ -47,4 +51,7 @@ export class Gif extends Model {
 
   @BelongsTo(() => User)
   user!: User;
+
+  @BelongsToMany(() => Tag, () => TagGifs)
+  tags!: [Tag];
 }
