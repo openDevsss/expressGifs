@@ -1,3 +1,4 @@
+import { authenticateUserToken } from "../middlewares/auth";
 import gifRoutes from "./Gif";
 import userRoutes from "./User";
 import { Router } from "express";

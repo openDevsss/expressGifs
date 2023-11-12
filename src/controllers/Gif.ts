@@ -44,10 +44,10 @@ export const createGif: RequestHandler = async (req, res, next) => {
 };
 
 export const getGifsCurrentUser: RequestHandler = async (req, res, next) => {
-  const { id: currentUserId } = req.user;
+  const { id } = req.user;
   try {
     const gifs = await Gif.findAll({
-      include: [{ model: User, where: { id: currentUserId } }],
+      include: [{ model: User, where: { id } }],
     });
     res.json(gifs);
   } catch (err) {

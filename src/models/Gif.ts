@@ -1,11 +1,3 @@
-// 1. nickname
-// 2. password
-// 3. email
-// 4. role
-// 5. avatar
-// 6. favourite tags
-// 7. isSucsec
-
 import {
   Table,
   Model,
