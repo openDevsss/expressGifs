@@ -1,11 +1,3 @@
-// 1. nickname
-// 2. password
-// 3. email
-// 4. role
-// 5. avatar
-// 6. favourite tags
-// 7. isSucsec
-
 import {
   Table,
   Model,
@@ -14,8 +6,6 @@ import {
   PrimaryKey,
   AutoIncrement,
   ForeignKey,
-  BelongsTo,
-  HasOne,
   HasMany,
 } from "sequelize-typescript";
 import { Role } from "./Role";

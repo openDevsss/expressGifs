@@ -21,3 +21,14 @@ export const getCurrentUser: RequestHandler = (req, res, next) => {
       next(err);
     });
 };
+
+export const updateCurrentUser: RequestHandler = async (req, res, next) => {
+  const { id } = req.user;
+  const { nickname, avatar } = req.body;
+  try {
+    const user = await User.update({ nickname, avatar }, { where: { id } });
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+};
