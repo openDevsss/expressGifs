@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { Gif } from "../models/Gif";
 import { User } from "../models/User";
 import { TagGifs } from "../models/TagGifs";
+import { Tag } from "../models/Tag";
 
 export const getAllGifs: RequestHandler = (req, res, next) => {
   Gif.findAll({
@@ -28,17 +29,24 @@ export const getGifById: RequestHandler = async (req, res, next) => {
 };
 
 export const createGif: RequestHandler = async (req, res, next) => {
-  const { title, description, url, tags } = req.body;
+  const { title, description, url, name } = req.body;
   const { id } = req.user;
   try {
     const createdGif = await Gif.create({
       title,
       description,
       url,
-      tags,
       userId: id,
     });
-    res.json(createdGif);
+    // console.log(createGif);
+    console.log(name, "name");
+    // const [tagsList] = await Tag.findOrCreate({
+    //   where: { name },
+    // });
+    const [tagsList] = await Tag.bulkCreate(name);
+    const result = await createdGif.addTag(tagsList);
+
+    return res.json({ data: result });
   } catch (err) {
     console.log(err);
   }

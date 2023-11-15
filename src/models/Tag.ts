@@ -12,7 +12,7 @@ import { TagGifs } from "./TagGifs";
 
 @Table({
   timestamps: false,
-  tableName: "Roles",
+  tableName: "Tags",
 })
 export class Tag extends Model {
   @AutoIncrement

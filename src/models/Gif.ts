@@ -13,6 +13,7 @@ import {
 import { User } from "./User";
 import { Tag } from "./Tag";
 import { TagGifs } from "./TagGifs";
+import { BelongsToManyAddAssociationMixin } from "sequelize";
 
 @Table({
   timestamps: true,
@@ -54,4 +55,6 @@ export class Gif extends Model {
 
   @BelongsToMany(() => Tag, () => TagGifs)
   tags!: [Tag];
+
+  public addTag!: BelongsToManyAddAssociationMixin<Tag, number>;
 }
