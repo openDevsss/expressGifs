@@ -3,11 +3,20 @@ import { Gif } from "../models/Gif";
 import { User } from "../models/User";
 import { TagGifs } from "../models/TagGifs";
 import { Tag } from "../models/Tag";
+import { where } from "sequelize";
 
 export const getAllGifs: RequestHandler = (req, res, next) => {
   Gif.findAll({
     include: [
       { model: User, attributes: ["nickname", "id", "avatar", "email"] },
+      {
+        model: Tag,
+        attributes: ["id", "name"],
+        through: {
+          as: "TagGifs",
+          attributes: [],
+        },
+      },
     ],
   })
     .then((gifs) => {
@@ -29,7 +38,7 @@ export const getGifById: RequestHandler = async (req, res, next) => {
 };
 
 export const createGif: RequestHandler = async (req, res, next) => {
-  const { title, description, url, name } = req.body;
+  const { title, description, url, tags } = req.body;
   const { id } = req.user;
   try {
     const createdGif = await Gif.create({
@@ -38,15 +47,9 @@ export const createGif: RequestHandler = async (req, res, next) => {
       url,
       userId: id,
     });
-    // console.log(createGif);
-    console.log(name, "name");
-    // const [tagsList] = await Tag.findOrCreate({
-    //   where: { name },
-    // });
-    const [tagsList] = await Tag.bulkCreate(name);
-    const result = await createdGif.addTag(tagsList);
 
-    return res.json({ data: result });
+    await createdGif.setTags(tags);
+    return res.json({ data: createdGif });
   } catch (err) {
     console.log(err);
   }
