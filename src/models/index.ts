@@ -1,9 +1,9 @@
 import { Sequelize } from "sequelize-typescript";
-import { Role } from "./Role";
-import { User } from "./User";
 import { Gif } from "./Gif";
+import { Role } from "./Role";
 import { Tag } from "./Tag";
 import { TagGifs } from "./TagGifs";
+import { User } from "./User";
 
 const sequelize = new Sequelize({
   host: "localhost",

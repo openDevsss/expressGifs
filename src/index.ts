@@ -1,10 +1,10 @@
-import express, { Express } from "express";
-import dotenv from "dotenv";
-import { router } from "./routes/index";
-import { createUser, loginUser } from "./controllers/Auth";
 import cors from "cors";
-import { User } from "./models/User";
+import dotenv from "dotenv";
+import express, { Express } from "express";
+import { createUser, loginUser } from "./controllers/Auth";
 import { initDb } from "./models";
+import { User } from "./models/User";
+import { router } from "./routes/index";
 
 dotenv.config();
 

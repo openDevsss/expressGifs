@@ -1,23 +1,18 @@
+import { BelongsToManySetAssociationsMixin } from "sequelize";
 import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  PrimaryKey,
   AutoIncrement,
-  ForeignKey,
   BelongsTo,
   BelongsToMany,
-  HasMany,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  PrimaryKey,
+  Table,
 } from "sequelize-typescript";
-import { User } from "./User";
 import { Tag } from "./Tag";
 import { TagGifs } from "./TagGifs";
-import {
-  BelongsToManyAddAssociationMixin,
-  BelongsToManyCreateAssociationMixinOptions,
-  BelongsToManySetAssociationsMixin,
-} from "sequelize";
+import { User } from "./User";
 
 @Table({
   timestamps: true,

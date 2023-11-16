@@ -1,8 +1,7 @@
-import { authenticateUserToken } from "../middlewares/auth";
-import gifRoutes from "./Gif";
-import userRoutes from "./User";
-import tagRoutes from "./Tag";
 import { Router } from "express";
+import gifRoutes from "./Gif";
+import tagRoutes from "./Tag";
+import userRoutes from "./User";
 
 const router = Router();
 

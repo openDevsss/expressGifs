@@ -1,6 +1,6 @@
-import { Table, Model, Column, ForeignKey } from "sequelize-typescript";
-import { Tag } from "./Tag";
+import { Column, ForeignKey, Model, Table } from "sequelize-typescript";
 import { Gif } from "./Gif";
+import { Tag } from "./Tag";
 
 @Table({
   timestamps: false,

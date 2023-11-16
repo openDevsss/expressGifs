@@ -1,14 +1,11 @@
 import {
-  Table,
-  Model,
+  AutoIncrement,
   Column,
   DataType,
+  Model,
   PrimaryKey,
-  AutoIncrement,
-  HasOne,
-  BelongsTo,
+  Table,
 } from "sequelize-typescript";
-import { User } from "./User";
 
 @Table({
   timestamps: false,

@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   createGif,
   getAllGifs,
-  getGifsCurrentUser,
   getGifById,
+  getGifsCurrentUser,
 } from "../controllers/Gif";
 import { authenticateUserToken } from "../middlewares/auth";
 

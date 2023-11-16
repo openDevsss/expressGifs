@@ -1,5 +1,5 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
-import type { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 import { UnathorizatedError } from "../utils/errors/unauthorizted-err";
 

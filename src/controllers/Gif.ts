@@ -1,9 +1,7 @@
 import { RequestHandler } from "express";
 import { Gif } from "../models/Gif";
-import { User } from "../models/User";
-import { TagGifs } from "../models/TagGifs";
 import { Tag } from "../models/Tag";
-import { where } from "sequelize";
+import { User } from "../models/User";
 
 export const getAllGifs: RequestHandler = (req, res, next) => {
   Gif.findAll({

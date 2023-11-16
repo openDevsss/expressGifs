@@ -1,11 +1,11 @@
 import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  PrimaryKey,
   AutoIncrement,
   BelongsToMany,
+  Column,
+  DataType,
+  Model,
+  PrimaryKey,
+  Table,
 } from "sequelize-typescript";
 import { Gif } from "./Gif";
 import { TagGifs } from "./TagGifs";

@@ -1,15 +1,15 @@
 import {
-  Table,
-  Model,
+  AutoIncrement,
   Column,
   DataType,
-  PrimaryKey,
-  AutoIncrement,
   ForeignKey,
   HasMany,
+  Model,
+  PrimaryKey,
+  Table,
 } from "sequelize-typescript";
-import { Role } from "./Role";
 import { Gif } from "./Gif";
+import { Role } from "./Role";
 
 @Table({
   timestamps: true,
