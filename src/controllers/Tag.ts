@@ -4,7 +4,7 @@ import { Tag } from "../models/Tag";
 export const getAllTags: RequestHandler = async (req, res, next) => {
   try {
     const tags = await Tag.findAll({});
-    return res.json({ tags });
+    return res.json(tags);
   } catch (err) {
     console.log(err);
   }
