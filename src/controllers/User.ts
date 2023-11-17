@@ -26,11 +26,11 @@ export const updateCurrentUser: RequestHandler = async (req, res, next) => {
   const { id } = req.user;
   const { nickname, avatar, email } = req.body;
   try {
-    const user = await User.update(
+    const [_, user] = await User.update(
       { nickname, avatar, email },
-      { where: { id } }
+      { where: { id }, returning: true }
     );
-    res.json(user);
+    res.json([...user]);
   } catch (err) {
     next(err);
   }

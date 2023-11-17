@@ -1,5 +1,5 @@
-import { RequestHandler } from "express";
 import bcrypt from "bcryptjs";
+import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 import { NotFoundError } from "../utils/errors/not-found-err";
@@ -36,6 +36,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
           id: user.id,
           email: user.email,
           nickname: user.nickname,
+          roleId: user.role_id,
         },
         "secret-key"
       );
