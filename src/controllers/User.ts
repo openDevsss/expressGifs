@@ -30,7 +30,7 @@ export const updateCurrentUser: RequestHandler = async (req, res, next) => {
       { nickname, avatar, email },
       { where: { id }, returning: true }
     );
-    res.json([...user]);
+    res.json([...user][0]);
   } catch (err) {
     next(err);
   }
