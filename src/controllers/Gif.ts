@@ -24,15 +24,28 @@ export const getAllGifs: RequestHandler = (req, res, next) => {
       console.log(err);
     });
 };
-
+// TODO: ДОБАВИТЬ СКОПЫ
 export const getGifById: RequestHandler = async (req, res, next) => {
   const { gifId } = req.params;
-  try {
-    const currentGif = Gif.findByPk(gifId);
-    res.json(currentGif);
-  } catch (err) {
-    console.log(err);
-  }
+  Gif.findByPk(gifId, {
+    include: [
+      { model: User, attributes: ["nickname", "id", "avatar", "email"] },
+      {
+        model: Tag,
+        attributes: ["id", "name"],
+        through: {
+          as: "TagGifs",
+          attributes: [],
+        },
+      },
+    ],
+  })
+    .then((gifs) => {
+      res.json(gifs);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const createGif: RequestHandler = async (req, res, next) => {
@@ -45,7 +58,6 @@ export const createGif: RequestHandler = async (req, res, next) => {
       url,
       userId: id,
     });
-
     await createdGif.setTags(tags);
     return res.json({ data: createdGif });
   } catch (err) {
