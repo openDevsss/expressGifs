@@ -12,6 +12,6 @@ const router = Router();
 router.get("/", getAllGifs);
 router.get("/me", authenticateUserToken, getGifsCurrentUser);
 router.post("/", authenticateUserToken, createGif);
-router.get("/alone", getGifById);
+router.get("/:id", getGifById);
 
 export default router;

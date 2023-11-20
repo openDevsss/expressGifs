@@ -26,10 +26,12 @@ export const getAllGifs: RequestHandler = (req, res, next) => {
 };
 
 export const getGifById: RequestHandler = async (req, res, next) => {
-  const { id } = req.body;
-  console.log(id);
+  const { id } = req.params;
   try {
-    const currentGif = Gif.findAll({ where: id });
+    const currentGif = await Gif.findByPk(id);
+    if (!currentGif) {
+      return res.json({ message: `Гифик с id ${id} не найдено` });
+    }
     return res.json({ data: currentGif });
   } catch (err) {
     console.log(err);
