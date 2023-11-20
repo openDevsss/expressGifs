@@ -3,26 +3,25 @@ import { Gif } from "../models/Gif";
 import { Tag } from "../models/Tag";
 import { User } from "../models/User";
 
-export const getAllGifs: RequestHandler = (req, res, next) => {
-  Gif.findAll({
-    include: [
-      { model: User, attributes: ["nickname", "id", "avatar", "email"] },
-      {
-        model: Tag,
-        attributes: ["id", "name"],
-        through: {
-          as: "TagGifs",
-          attributes: [],
+export const getAllGifs: RequestHandler = async (_, res, next) => {
+  try {
+    const gifs = await Gif.findAll({
+      include: [
+        { model: User, attributes: ["nickname", "id", "avatar", "email"] },
+        {
+          model: Tag,
+          attributes: ["id", "name"],
+          through: {
+            as: "TagGifs",
+            attributes: [],
+          },
         },
-      },
-    ],
-  })
-    .then((gifs) => {
-      res.json(gifs);
-    })
-    .catch((err) => {
-      console.log(err);
+      ],
     });
+    return res.json({ data: gifs });
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getGifById: RequestHandler = async (req, res, next) => {
@@ -30,11 +29,11 @@ export const getGifById: RequestHandler = async (req, res, next) => {
   try {
     const currentGif = await Gif.findByPk(id);
     if (!currentGif) {
-      return res.json({ message: `Гифик с id ${id} не найдено` });
+      return res.json({ message: `Гифки с id ${id} не найдено` });
     }
     return res.json({ data: currentGif });
   } catch (err) {
-    console.log(err);
+    next(err);
   }
 };
 
@@ -54,7 +53,7 @@ export const createGif: RequestHandler = async (req, res, next) => {
     await createdGif.setTags(tags);
     return res.json({ data: createdGif });
   } catch (err) {
-    console.log(err);
+    next(err);
   }
 };
 

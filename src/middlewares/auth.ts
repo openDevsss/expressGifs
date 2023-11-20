@@ -15,7 +15,7 @@ export const authenticateUserToken = async (
     payload = jwt.verify(token, "secret-key");
     console.log(payload);
   } catch (error) {
-    return next(new UnathorizatedError("Ввойдите в аккаунт!!!"));
+    return next(new UnathorizatedError("Вы не вышло в аккаунт"));
   }
   req.user = payload as User;
   return next();

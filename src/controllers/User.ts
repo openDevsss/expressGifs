@@ -8,8 +8,8 @@ export const getAllUsers: RequestHandler = async (_, res, next) => {
       return res.json({ message: "Ошибка при получении всех пользователей" });
     }
     return res.json({ data: users });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -21,8 +21,8 @@ export const getCurrentUser: RequestHandler = async (req, res, next) => {
       return res.json({ message: `Пользователя с id ${id} не существует` });
     }
     return res.json({ data: user });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -38,7 +38,7 @@ export const updateCurrentUser: RequestHandler = async (req, res, next) => {
       return res.json({ message: "Ошибка при обновлении аккаунта" });
     }
     return res.json([...user][0]);
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    next(err);
   }
 };

@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
+import { BadRequestError } from "../utils/errors/bad-request-err";
 import { NotFoundError } from "../utils/errors/not-found-err";
 
 export const createUser: RequestHandler = async (req, res, next) => {
@@ -15,9 +16,9 @@ export const createUser: RequestHandler = async (req, res, next) => {
       password: hashPassword,
     });
     await user.save();
-    res.json(user);
-  } catch (error) {
-    console.log(`err $${error}`);
+    return res.json({ data: user });
+  } catch (err) {
+    next(new BadRequestError("Произошла ошибка при регистрации"));
   }
 };
 
@@ -43,10 +44,10 @@ export const loginUser: RequestHandler = async (req, res, next) => {
       const { password, ...userData } = user.dataValues;
       res.send({ token, ...userData });
     } else {
-      return next(new NotFoundError("Проверьте пароль"));
+      next(new NotFoundError("Проверьте пароль"));
     }
   } else {
-    return next(new NotFoundError("Проверьте введенные данные"));
+    next(new NotFoundError("Проверьте введенные данные"));
   }
-  return next();
+  next();
 };
