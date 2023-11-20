@@ -21,7 +21,7 @@ export const getAllGifs: RequestHandler = async (_, res, next) => {
         {
           model: Comment,
           attributes: ["id", "comment_text", "createdAt"],
-          include: [{ model: User, attributes: ["id", "nickname"] }],
+          include: [{ model: User, attributes: ["id", "nickname", "avatar"] }],
         },
       ],
     });
