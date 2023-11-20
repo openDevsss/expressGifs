@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { Gif } from "../models/Gif";
 import { Tag } from "../models/Tag";
 import { User } from "../models/User";
+import { BadRequestError } from "../utils/errors/bad-request-err";
 
 export const getAllGifs: RequestHandler = async (_, res, next) => {
   try {
@@ -67,4 +68,18 @@ export const getGifsCurrentUser: RequestHandler = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+export const deleteGifById: RequestHandler = async (req, res, next) => {
+  const { id } = req.params;
+  const gif = await Gif.findByPk(id);
+  if (gif) {
+    await gif.destroy();
+    res.json({
+      message: `товар с id ${id} успешно удален`,
+    });
+  } else {
+    return next(new BadRequestError(`товара с id ${id} не существует`));
+  }
+  return next();
 };
