@@ -8,6 +8,7 @@ import {
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
+import { Comment } from "./Comment";
 import { Gif } from "./Gif";
 import { Role } from "./Role";
 
@@ -73,4 +74,7 @@ export class User extends Model {
 
   @HasMany(() => Gif)
   gif!: Gif;
+
+  @HasMany(() => Comment)
+  comment!: Comment;
 }

@@ -6,10 +6,12 @@ import {
   Column,
   DataType,
   ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
+import { Comment } from "./Comment";
 import { Tag } from "./Tag";
 import { TagGifs } from "./TagGifs";
 import { User } from "./User";
@@ -54,6 +56,16 @@ export class Gif extends Model {
 
   @BelongsToMany(() => Tag, () => TagGifs)
   tags!: [Tag];
+
+  @HasMany(() => Comment)
+  comment!: Comment;
+
+  @ForeignKey(() => Comment)
+  @Column({
+    type: DataType.BIGINT,
+    defaultValue: 2,
+  })
+  commentId!: number;
 
   declare setTags: BelongsToManySetAssociationsMixin<Tag, Tag["id"]>;
 }
