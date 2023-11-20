@@ -60,12 +60,12 @@ export class Gif extends Model {
   @HasMany(() => Comment)
   comment!: Comment;
 
-  @ForeignKey(() => Comment)
-  @Column({
-    type: DataType.BIGINT,
-    defaultValue: 2,
-  })
-  commentId!: number;
+  // @ForeignKey(() => Comment)
+  // @Column({
+  //   type: DataType.BIGINT,
+  //   defaultValue: 2,
+  // })
+  // commentId!: number;
 
   declare setTags: BelongsToManySetAssociationsMixin<Tag, Tag["id"]>;
 }

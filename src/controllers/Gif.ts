@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { Comment } from "../models/Comment";
 import { Gif } from "../models/Gif";
 import { Tag } from "../models/Tag";
 import { User } from "../models/User";
@@ -16,6 +17,11 @@ export const getAllGifs: RequestHandler = async (_, res, next) => {
             as: "TagGifs",
             attributes: [],
           },
+        },
+        {
+          model: Comment,
+          attributes: ["id", "comment_text", "createdAt"],
+          include: [{ model: User, attributes: ["id", "nickname"] }],
         },
       ],
     });

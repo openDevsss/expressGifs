@@ -32,7 +32,6 @@ export class Comment extends Model {
 
   @BelongsTo(() => User)
   user!: User;
-
   @BelongsTo(() => Gif)
   gif!: Gif;
 
