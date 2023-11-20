@@ -1,25 +1,29 @@
 import { RequestHandler } from "express";
 import { User } from "../models/User";
 
-export const getAllUsers: RequestHandler = (req, res, next) => {
-  User.findAll({})
-    .then((users) => {
-      res.json(users);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+export const getAllUsers: RequestHandler = async (_, res, next) => {
+  try {
+    const users = await User.findAll({});
+    if (!users) {
+      return res.json({ message: "Ошибка при получении всех пользователей" });
+    }
+    return res.json({ data: users });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export const getCurrentUser: RequestHandler = (req, res, next) => {
+export const getCurrentUser: RequestHandler = async (req, res, next) => {
   const { id } = req.user;
-  User.findByPk(id)
-    .then((user) => {
-      return res.json(user);
-    })
-    .catch((err) => {
-      next(err);
-    });
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.json({ message: `Пользователя с id ${id} не существует` });
+    }
+    return res.json({ data: user });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const updateCurrentUser: RequestHandler = async (req, res, next) => {
@@ -30,8 +34,11 @@ export const updateCurrentUser: RequestHandler = async (req, res, next) => {
       { nickname, avatar, email },
       { where: { id }, returning: true }
     );
-    res.json([...user][0]);
-  } catch (err) {
-    next(err);
+    if (!user) {
+      return res.json({ message: "Ошибка при обновлении аккаунта" });
+    }
+    return res.json([...user][0]);
+  } catch (error) {
+    console.log(error);
   }
 };

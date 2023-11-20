@@ -48,6 +48,9 @@ export const createGif: RequestHandler = async (req, res, next) => {
       url,
       userId: id,
     });
+    if (!createGif) {
+      return res.json({ message: "Ошибка при создании гифки" });
+    }
     await createdGif.setTags(tags);
     return res.json({ data: createdGif });
   } catch (err) {
@@ -61,7 +64,7 @@ export const getGifsCurrentUser: RequestHandler = async (req, res, next) => {
     const gifs = await Gif.findAll({
       include: [{ model: User, where: { id } }],
     });
-    res.json(gifs);
+    return res.json({ data: gifs });
   } catch (err) {
     next(err);
   }
