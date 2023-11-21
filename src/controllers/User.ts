@@ -31,7 +31,7 @@ export const getCurrentUser: RequestHandler = async (req, res, next) => {
     if (!user) {
       return res.json({ message: `Пользователя с id ${id} не существует` });
     }
-    return res.json({ user: userData, token });
+    return res.json({ ...userData, token });
   } catch (err) {
     next(err);
   }
