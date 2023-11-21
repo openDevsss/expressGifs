@@ -44,12 +44,6 @@ export class User extends Model {
   })
   password!: string;
 
-  // @Column({
-  //   type: DataType.STRING,
-  //   allowNull: false,
-  // })
-  // token!: string;
-
   @Column({
     type: DataType.STRING,
     allowNull: false,

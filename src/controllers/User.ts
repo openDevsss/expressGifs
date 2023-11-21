@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 
 export const getAllUsers: RequestHandler = async (_, res, next) => {
@@ -16,11 +17,21 @@ export const getAllUsers: RequestHandler = async (_, res, next) => {
 export const getCurrentUser: RequestHandler = async (req, res, next) => {
   const { id } = req.user;
   try {
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, { raw: true });
+    const token = jwt.sign(
+      {
+        id: user?.id,
+        email: user?.email,
+        nickname: user?.nickname,
+        roleId: user?.role_id,
+      },
+      "secret-key"
+    );
+    const { password, ...userData } = user!;
     if (!user) {
       return res.json({ message: `Пользователя с id ${id} не существует` });
     }
-    return res.json({ data: user });
+    return res.json({ user: userData, token });
   } catch (err) {
     next(err);
   }
