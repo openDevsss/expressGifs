@@ -38,7 +38,7 @@ export const getGifById: RequestHandler = async (req, res, next) => {
     if (!currentGif) {
       return res.json({ message: `Гифки с id ${id} не найдено` });
     }
-    return res.json({ data: currentGif });
+    return res.json(currentGif);
   } catch (err) {
     next(err);
   }
