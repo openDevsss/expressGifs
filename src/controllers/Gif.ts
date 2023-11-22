@@ -34,7 +34,25 @@ export const getAllGifs: RequestHandler = async (_, res, next) => {
 export const getGifById: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const currentGif = await Gif.findByPk(id);
+    const currentGif = await Gif.findAll({
+      where: { id },
+      include: [
+        { model: User, attributes: ["nickname", "id", "avatar", "email"] },
+        {
+          model: Tag,
+          attributes: ["id", "name"],
+          through: {
+            as: "TagGifs",
+            attributes: [],
+          },
+        },
+        {
+          model: Comment,
+          attributes: ["id", "comment_text", "createdAt"],
+          include: [{ model: User, attributes: ["id", "nickname", "avatar"] }],
+        },
+      ],
+    });
     if (!currentGif) {
       return res.json({ message: `Гифки с id ${id} не найдено` });
     }
