@@ -36,7 +36,6 @@ export const getGifById: RequestHandler = async (req, res, next) => {
   try {
     const currentGif = await Gif.findAll({
       where: { id },
-      raw: true,
       include: [
         { model: User, attributes: ["nickname", "id", "avatar", "email"] },
         {
