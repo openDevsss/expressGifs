@@ -29,6 +29,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
       email: email,
     },
   });
+  // check
   if (user) {
     const matched = await bcrypt.compare(password, user.password);
     if (matched) {
