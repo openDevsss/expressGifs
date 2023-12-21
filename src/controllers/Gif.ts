@@ -4,6 +4,7 @@ import { Gif } from "../models/Gif";
 import { Tag } from "../models/Tag";
 import { User } from "../models/User";
 import { BadRequestError } from "../utils/errors/bad-request-err";
+import { Like } from "../models/Like";
 
 export const getAllGifs: RequestHandler = async (_, res, next) => {
   try {
@@ -22,6 +23,13 @@ export const getAllGifs: RequestHandler = async (_, res, next) => {
           model: Comment,
           attributes: ["id", "comment_text", "createdAt"],
           include: [{ model: User, attributes: ["id", "nickname", "avatar"] }],
+        },
+        {
+          model: Like,
+          attributes: ["id"],
+          include: [
+            { model: User, attributes: ["nickname", "id", "avatar", "email"] },
+          ],
         },
       ],
     });

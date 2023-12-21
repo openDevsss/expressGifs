@@ -13,9 +13,9 @@ import { User } from "./User";
 
 @Table({
   timestamps: true,
-  tableName: "Comments",
+  tableName: "Likes",
 })
-export class Comment extends Model {
+export class Like extends Model {
   @AutoIncrement
   @PrimaryKey
   @Column({
@@ -24,21 +24,14 @@ export class Comment extends Model {
   })
   id!: bigint;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  comment_text!: string;
-
-  @BelongsTo(() => User)
-  user!: User;
-
-  @BelongsTo(() => Gif)
-  gif!: Gif;
-
   @ForeignKey(() => User)
+  @Column
   userId!: number;
 
   @ForeignKey(() => Gif)
-  gifId!: number;
+  @Column
+  gifId!: bigint;
+
+  @BelongsTo(() => User)
+  user!: User;
 }

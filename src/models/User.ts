@@ -11,6 +11,7 @@ import {
 import { Comment } from "./Comment";
 import { Gif } from "./Gif";
 import { Role } from "./Role";
+import { Like } from "./Like";
 
 @Table({
   timestamps: true,
@@ -71,4 +72,7 @@ export class User extends Model {
 
   @HasMany(() => Comment)
   comment!: Comment;
+
+  @HasMany(() => Like)
+  likes!: Like[];
 }

@@ -5,6 +5,7 @@ import { Role } from "./Role";
 import { Tag } from "./Tag";
 import { TagGifs } from "./TagGifs";
 import { User } from "./User";
+import { Like } from "./Like";
 
 const sequelize = new Sequelize({
   host: "localhost",
@@ -14,7 +15,7 @@ const sequelize = new Sequelize({
   password: "kirill",
 });
 
-sequelize.addModels([Role, User, Gif, Tag, TagGifs, Comment]);
+sequelize.addModels([Role, User, Gif, Tag, TagGifs, Comment, Like]);
 
 export const initDb = async () => {
   await sequelize.sync();

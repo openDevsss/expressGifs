@@ -15,6 +15,7 @@ import { Comment } from "./Comment";
 import { Tag } from "./Tag";
 import { TagGifs } from "./TagGifs";
 import { User } from "./User";
+import { Like } from "./Like";
 
 @Table({
   timestamps: true,
@@ -60,12 +61,8 @@ export class Gif extends Model {
   @HasMany(() => Comment)
   comment!: Comment;
 
-  // @ForeignKey(() => Comment)
-  // @Column({
-  //   type: DataType.BIGINT,
-  //   defaultValue: 2,
-  // })
-  // commentId!: number;
+  @HasMany(() => Like)
+  likes!: Like[];
 
   declare setTags: BelongsToManySetAssociationsMixin<Tag, Tag["id"]>;
 }
