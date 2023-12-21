@@ -1,3 +1,5 @@
+/// <reference path="./express.d.ts" />
+
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
@@ -10,14 +12,6 @@ dotenv.config();
 
 const port = process.env.PORT;
 const app: Express = express();
-
-declare global {
-  namespace Express {
-    interface Request {
-      user: User;
-    }
-  }
-}
 
 app.use(cors());
 app.use(express.json());

@@ -10,13 +10,14 @@ export const addCommentForGif: RequestHandler = async (req, res, next) => {
       gifId,
       userId: id,
     });
-    if (!comment) {
-      return res.json({
-        message: "Произошла ошибка при добавление комментария",
-      });
-    }
-    return res.json({ message: "Вы успешно оставили свой комментарий" });
+    return res.status(201).json({
+      message: "Вы успешно оставили свой комментарий",
+      data: { ...comment },
+    });
   } catch (err) {
-    return next(err);
+    console.error("Ошибка при добавлении комментария:", err);
+    return res
+      .status(500)
+      .json({ error: "Произошла ошибка при добавлении комментария" });
   }
 };
