@@ -43,6 +43,13 @@ export class Gif extends Model {
   description!: string;
 
   @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
+  })
+  viewers!: number;
+
+  @Column({
     type: DataType.STRING,
     allowNull: false,
   })
