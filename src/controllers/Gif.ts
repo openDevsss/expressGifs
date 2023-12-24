@@ -42,9 +42,11 @@ export const getAllGifs: RequestHandler = async (_, res, next) => {
 export const getGifById: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const currentGif = await Gif.findAll({
+    // Изменено: Используйте findOne вместо findAll, чтобы получить одну запись
+    const currentGif = await Gif.findOne({
       where: { id },
       include: [
+        // Добавлено: Запрос теперь включает модель User и Tag
         { model: User, attributes: ["nickname", "id", "avatar", "email"] },
         {
           model: Tag,
@@ -61,10 +63,14 @@ export const getGifById: RequestHandler = async (req, res, next) => {
         },
       ],
     });
+
     if (!currentGif) {
       return res.json({ message: `Гифки с id ${id} не найдено` });
     }
-    return res.json(...currentGif);
+
+    await currentGif.increment("viewers", { by: 1 });
+
+    return res.json({ data: currentGif });
   } catch (err) {
     next(err);
   }
