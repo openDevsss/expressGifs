@@ -1,5 +1,3 @@
-"use strict";
-
 const TABLE_NAME = "Gifs";
 const COLUMN_NAME = "viewers";
 

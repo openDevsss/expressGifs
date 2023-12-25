@@ -12,6 +12,7 @@ import { Comment } from "./Comment";
 import { Gif } from "./Gif";
 import { Role } from "./Role";
 import { Like } from "./Like";
+import { Subscription } from "./Subscriptions";
 
 @Table({
   timestamps: true,
@@ -76,10 +77,9 @@ export class User extends Model {
   @HasMany(() => Like)
   likes!: Like[];
 
-  // подписки
-  @HasMany(() => User, { foreignKey: "followerId", as: "following" })
-  following!: User[];
-  // подписчики
-  @HasMany(() => User, { foreignKey: "followeeId", as: "followers" })
-  followers!: User[];
+  @HasMany(() => Subscription, { foreignKey: "followerId" })
+  following!: Subscription[];
+
+  @HasMany(() => Subscription, { foreignKey: "followeeId" })
+  followers!: Subscription[];
 }

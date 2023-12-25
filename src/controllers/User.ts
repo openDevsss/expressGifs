@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
+import { Subscription } from "../models/Subscriptions";
 
 export const getAllUsers: RequestHandler = async (_, res, next) => {
   try {
@@ -30,11 +31,26 @@ export const getUserById: RequestHandler = async (req, res, next) => {
 
 export const getCurrentUser: RequestHandler = async (req, res, next) => {
   const { id } = req.user;
+
   try {
-    const user = await User.findOne({ where: { id } });
+    const user = await User.findOne({
+      where: { id },
+      include: [
+        {
+          model: Subscription,
+          as: "following",
+        },
+        {
+          model: Subscription,
+          as: "followers",
+        },
+      ],
+    });
+
     if (!user) {
       return res.json({ message: `Пользователя с id ${id} не существует` });
     }
+
     const secretKey = process.env.JWT_SECRET || "default-secret-key";
     const token = jwt.sign(
       {
@@ -45,7 +61,9 @@ export const getCurrentUser: RequestHandler = async (req, res, next) => {
       },
       secretKey
     );
+
     const { password, ...userData } = user.get();
+
     return res.json({ ...userData, token });
   } catch (err) {
     next(err);
