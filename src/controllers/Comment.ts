@@ -12,7 +12,7 @@ export const addCommentForGif: RequestHandler = async (req, res, next) => {
     });
     return res.status(201).json({
       message: "Вы успешно оставили свой комментарий",
-      data: { ...comment },
+      comment,
     });
   } catch (err) {
     console.error("Ошибка при добавлении комментария:", err);
