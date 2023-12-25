@@ -13,7 +13,6 @@ export const authenticateUserToken = async (
   let payload;
   try {
     payload = jwt.verify(token, "secret-key");
-    console.log(payload);
   } catch (error) {
     return next(new UnathorizatedError("Вы не вышло в аккаунт"));
   }
