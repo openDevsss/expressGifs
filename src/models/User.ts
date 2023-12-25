@@ -75,4 +75,11 @@ export class User extends Model {
 
   @HasMany(() => Like)
   likes!: Like[];
+
+  // подписки
+  @HasMany(() => User, { foreignKey: "followerId", as: "following" })
+  following!: User[];
+  // подписчики
+  @HasMany(() => User, { foreignKey: "followeeId", as: "followers" })
+  followers!: User[];
 }
