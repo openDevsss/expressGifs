@@ -96,18 +96,6 @@ export const createGif: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const getGifsCurrentUser: RequestHandler = async (req, res, next) => {
-  const { id } = req.user;
-  try {
-    const gifs = await Gif.findAll({
-      include: [{ model: User, where: { id } }],
-    });
-    return res.json({ data: gifs });
-  } catch (err) {
-    next(err);
-  }
-};
-
 export const deleteGifById: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
   const gif = await Gif.findByPk(id);

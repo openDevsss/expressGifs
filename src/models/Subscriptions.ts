@@ -1,6 +1,7 @@
 // models/Subscription.ts
 import {
   AutoIncrement,
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -22,6 +23,8 @@ export class Subscription extends Model {
   })
   id!: bigint;
 
+  // Ваша модель Subscription
+  @BelongsTo(() => User, { foreignKey: "followerId", as: "follower" })
   @ForeignKey(() => User)
   @Column({
     type: DataType.BIGINT,
@@ -29,6 +32,7 @@ export class Subscription extends Model {
   })
   followerId!: bigint;
 
+  @BelongsTo(() => User, { foreignKey: "followeeId", as: "followee" })
   @ForeignKey(() => User)
   @Column({
     type: DataType.BIGINT,

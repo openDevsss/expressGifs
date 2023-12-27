@@ -2,10 +2,31 @@ import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 import { Subscription } from "../models/Subscriptions";
+import { Gif } from "../models/Gif";
 
 export const getAllUsers: RequestHandler = async (_, res, next) => {
   try {
-    const users = await User.findAll({});
+    const users = await User.findAll({
+      include: [
+        {
+          association: "following",
+          attributes: ["followerId", "followeeId"],
+          include: [
+            { model: User, as: "followee", attributes: ["id", "nickname"] },
+          ],
+        },
+        {
+          association: "followers",
+          attributes: ["followerId", "followeeId"],
+          include: [
+            { model: User, as: "follower", attributes: ["id", "nickname"] },
+          ],
+        },
+        {
+          model: Gif,
+        },
+      ],
+    });
     if (!users) {
       return res.json({ message: "Ошибка при получении всех пользователей" });
     }
@@ -18,7 +39,28 @@ export const getAllUsers: RequestHandler = async (_, res, next) => {
 export const getUserById: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const user = await User.findByPk(id, { raw: true });
+    const user = await User.findByPk(id, {
+      raw: true,
+      include: [
+        {
+          association: "following",
+          attributes: ["followerId", "followeeId"],
+          include: [
+            { model: User, as: "followee", attributes: ["id", "nickname"] },
+          ],
+        },
+        {
+          association: "followers",
+          attributes: ["followerId", "followeeId"],
+          include: [
+            { model: User, as: "follower", attributes: ["id", "nickname"] },
+          ],
+        },
+        {
+          model: Gif,
+        },
+      ],
+    });
     if (!user) {
       return res.json({ message: `Пользователя с id ${id} не существует` });
     }
@@ -37,12 +79,21 @@ export const getCurrentUser: RequestHandler = async (req, res, next) => {
       where: { id },
       include: [
         {
-          model: Subscription,
-          as: "following",
+          association: "following",
+          attributes: ["followerId", "followeeId"],
+          include: [
+            { model: User, as: "followee", attributes: ["id", "nickname"] },
+          ],
         },
         {
-          model: Subscription,
-          as: "followers",
+          association: "followers",
+          attributes: ["followerId", "followeeId"],
+          include: [
+            { model: User, as: "follower", attributes: ["id", "nickname"] },
+          ],
+        },
+        {
+          model: Gif,
         },
       ],
     });
