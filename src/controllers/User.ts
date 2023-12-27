@@ -94,6 +94,7 @@ export const getCurrentUser: RequestHandler = async (req, res, next) => {
         },
         {
           model: Gif,
+          as: "gifs",
         },
       ],
     });

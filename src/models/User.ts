@@ -68,7 +68,7 @@ export class User extends Model {
   })
   role_id!: number;
 
-  @HasMany(() => Gif)
+  @HasMany(() => Gif, { as: "gifs" })
   gif!: Gif;
 
   @HasMany(() => Comment)
