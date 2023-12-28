@@ -66,7 +66,7 @@ export const getUserById: RequestHandler = async (req, res, next) => {
       return res.json({ message: `Пользователя с id ${id} не существует` });
     }
     const { password, ...userData } = user;
-    return res.json(userData);
+    return res.json({ user: userData });
   } catch (err) {
     next(err);
   }
