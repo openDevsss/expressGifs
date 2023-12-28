@@ -40,6 +40,8 @@ export const getUserById: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
   try {
     const user = await User.findByPk(id, {
+      raw: true,
+      nest: true,
       include: [
         {
           association: "following",
