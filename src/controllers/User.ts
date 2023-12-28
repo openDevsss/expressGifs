@@ -38,26 +38,28 @@ export const getAllUsers: RequestHandler = async (_, res, next) => {
   }
 };
 
+const userInclude = {
+  model: User,
+  attributes: ["id", "nickname", "avatar"],
+};
+
 export const getUserById: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
+
   try {
     const user = await User.findOne({
       where: { id },
-      attributes: { exclude: ["password"] }, // Исключаем пароль и другие циклические зависимости
+      attributes: { exclude: ["password"] },
       include: [
         {
           association: "following",
           attributes: ["followerId", "followeeId"],
-          include: [
-            { model: User, as: "followee", attributes: ["id", "nickname"] },
-          ],
+          include: [{ ...userInclude, as: "followee" }],
         },
         {
           association: "followers",
           attributes: ["followerId", "followeeId"],
-          include: [
-            { model: User, as: "follower", attributes: ["id", "nickname"] },
-          ],
+          include: [{ ...userInclude, as: "follower" }],
         },
         {
           model: Gif,
@@ -75,26 +77,22 @@ export const getUserById: RequestHandler = async (req, res, next) => {
             {
               model: Comment,
               attributes: ["id", "comment_text", "createdAt"],
-              include: [
-                { model: User, attributes: ["id", "nickname", "avatar"] },
-              ],
+              include: [userInclude],
             },
             {
               model: Like,
               attributes: ["userId", "gifId"],
-              include: [
-                {
-                  model: User,
-                },
-              ],
+              include: [userInclude],
             },
           ],
         },
       ],
     });
+
     if (!user) {
       return res.json({ message: `Пользователя с id ${id} не существует` });
     }
+
     const { password, ...userData } = user.toJSON();
     return res.json({ user: userData });
   } catch (err) {
