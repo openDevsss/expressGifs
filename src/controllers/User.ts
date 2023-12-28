@@ -65,6 +65,12 @@ export const getUserById: RequestHandler = async (req, res, next) => {
           include: [
             {
               model: Like,
+              attributes: [],
+              include: [
+                {
+                  model: User,
+                },
+              ],
             },
           ],
         },
@@ -104,6 +110,18 @@ export const getCurrentUser: RequestHandler = async (req, res, next) => {
         {
           model: Gif,
           as: "gifs",
+          attributes: { exclude: ["userId"] },
+          include: [
+            {
+              model: Like,
+              attributes: [],
+              include: [
+                {
+                  model: User,
+                },
+              ],
+            },
+          ],
         },
       ],
     });
