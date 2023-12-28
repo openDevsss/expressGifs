@@ -37,7 +37,6 @@ export const getAllUsers: RequestHandler = async (_, res, next) => {
     next(err);
   }
 };
-
 const userInclude = {
   model: User,
   attributes: ["id", "nickname", "avatar"],
@@ -81,7 +80,7 @@ export const getUserById: RequestHandler = async (req, res, next) => {
             },
             {
               model: Like,
-              attributes: ["userId", "gifId"],
+              attributes: ["id"],
               include: [userInclude],
             },
           ],
