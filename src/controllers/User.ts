@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 import { Subscription } from "../models/Subscriptions";
 import { Gif } from "../models/Gif";
+import { Like } from "../models/Like";
 
 export const getAllUsers: RequestHandler = async (_, res, next) => {
   try {
@@ -60,7 +61,12 @@ export const getUserById: RequestHandler = async (req, res, next) => {
         {
           model: Gif,
           as: "gifs",
-          attributes: { exclude: ["userId"] }, // Исключаем циклическую зависимость
+          attributes: { exclude: ["userId"] },
+          include: [
+            {
+              model: Like,
+            },
+          ],
         },
       ],
     });
