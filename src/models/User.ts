@@ -1,3 +1,4 @@
+// В модели User
 import {
   AutoIncrement,
   Column,
@@ -68,8 +69,8 @@ export class User extends Model {
   })
   role_id!: number;
 
-  @HasMany(() => Gif, { as: "gifs" })
-  gif!: Gif;
+  @HasMany(() => Gif, { foreignKey: "userId", as: "gifs" })
+  gifs!: Gif[];
 
   @HasMany(() => Comment)
   comment!: Comment;

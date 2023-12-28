@@ -39,9 +39,8 @@ export const getAllUsers: RequestHandler = async (_, res, next) => {
 export const getUserById: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const user = await User.findByPk(id, {
-      raw: true,
-      nest: true,
+    const user = await User.findOne({
+      where: { id },
       include: [
         {
           association: "following",
@@ -60,7 +59,6 @@ export const getUserById: RequestHandler = async (req, res, next) => {
         {
           model: Gif,
           as: "gifs",
-          isMultiAssociation: true,
         },
       ],
     });
