@@ -4,6 +4,8 @@ import { User } from "../models/User";
 import { Subscription } from "../models/Subscriptions";
 import { Gif } from "../models/Gif";
 import { Like } from "../models/Like";
+import { Tag } from "../models/Tag";
+import { Comment } from "../models/Comment";
 
 export const getAllUsers: RequestHandler = async (_, res, next) => {
   try {
@@ -64,6 +66,21 @@ export const getUserById: RequestHandler = async (req, res, next) => {
           attributes: { exclude: ["userId"] },
           include: [
             {
+              model: Tag,
+              attributes: ["id", "name"],
+              through: {
+                as: "TagGifs",
+                attributes: [],
+              },
+            },
+            {
+              model: Comment,
+              attributes: ["id", "comment_text", "createdAt"],
+              include: [
+                { model: User, attributes: ["id", "nickname", "avatar"] },
+              ],
+            },
+            {
               model: Like,
               attributes: ["userId", "gifId"],
               include: [
@@ -92,38 +109,6 @@ export const getCurrentUser: RequestHandler = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { id },
-      include: [
-        {
-          association: "following",
-          attributes: ["followerId", "followeeId"],
-          include: [
-            { model: User, as: "followee", attributes: ["id", "nickname"] },
-          ],
-        },
-        {
-          association: "followers",
-          attributes: ["followerId", "followeeId"],
-          include: [
-            { model: User, as: "follower", attributes: ["id", "nickname"] },
-          ],
-        },
-        {
-          model: Gif,
-          as: "gifs",
-          attributes: { exclude: ["userId"] },
-          include: [
-            {
-              model: Like,
-              attributes: ["userId", "gifId"],
-              include: [
-                {
-                  model: User,
-                },
-              ],
-            },
-          ],
-        },
-      ],
     });
 
     if (!user) {
