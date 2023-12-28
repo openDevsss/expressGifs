@@ -41,6 +41,7 @@ export const getUserById: RequestHandler = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { id },
+      attributes: { exclude: ["password"] }, // Исключаем пароль и другие циклические зависимости
       include: [
         {
           association: "following",
@@ -59,13 +60,14 @@ export const getUserById: RequestHandler = async (req, res, next) => {
         {
           model: Gif,
           as: "gifs",
+          attributes: { exclude: ["userId"] }, // Исключаем циклическую зависимость
         },
       ],
     });
     if (!user) {
       return res.json({ message: `Пользователя с id ${id} не существует` });
     }
-    const { password, ...userData } = user;
+    const { password, ...userData } = user.toJSON();
     return res.json({ user: userData });
   } catch (err) {
     next(err);
