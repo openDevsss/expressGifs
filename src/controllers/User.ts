@@ -80,7 +80,7 @@ export const getUserById: RequestHandler = async (req, res, next) => {
             },
             {
               model: Like,
-              attributes: ["id"],
+              attributes: ["id", "userId", "gifId"],
               include: [userInclude],
             },
           ],
