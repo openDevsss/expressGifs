@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
-import { Subscription } from "../models/Subscriptions";
 import { Gif } from "../models/Gif";
 import { Like } from "../models/Like";
 import { Tag } from "../models/Tag";
