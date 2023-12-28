@@ -114,7 +114,7 @@ export const getCurrentUser: RequestHandler = async (req, res, next) => {
           include: [
             {
               model: Like,
-              attributes: [],
+              attributes: ["userId", "gifId"],
               include: [
                 {
                   model: User,
