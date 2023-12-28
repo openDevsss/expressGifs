@@ -75,17 +75,18 @@ export const getUserById: RequestHandler = async (req, res, next) => {
             },
             {
               model: Comment,
+              attributes: ["id", "comment_text", "createdAt"],
               include: [
-                {
-                  model: User,
-                },
+                { model: User, attributes: ["id", "nickname", "avatar"] },
               ],
             },
             {
               model: Like,
+              attributes: ["id"],
               include: [
                 {
                   model: User,
+                  attributes: ["nickname", "id", "avatar", "email"],
                 },
               ],
             },
