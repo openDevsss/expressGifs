@@ -60,6 +60,7 @@ export const getUserById: RequestHandler = async (req, res, next) => {
         {
           model: Gif,
           as: "gifs",
+          isMultiAssociation: true,
         },
       ],
     });
