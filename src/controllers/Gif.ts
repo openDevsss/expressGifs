@@ -1,3 +1,6 @@
+import express from "express";
+import multer from "multer";
+import path from "path";
 import { RequestHandler } from "express";
 import { Comment } from "../models/Comment";
 import { Gif } from "../models/Gif";
@@ -5,6 +8,21 @@ import { Tag } from "../models/Tag";
 import { User } from "../models/User";
 import { BadRequestError } from "../utils/errors/bad-request-err";
 import { Like } from "../models/Like";
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+export const uploadGif: RequestHandler = upload.single("gif");
 
 export const getAllGifs: RequestHandler = async (_, res, next) => {
   try {
