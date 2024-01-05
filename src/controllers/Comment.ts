@@ -25,9 +25,6 @@ export const addCommentForGif: RequestHandler = async (req, res, next) => {
       data: responseData,
     });
   } catch (err) {
-    console.error("Ошибка при добавлении комментария:", err);
-    return res
-      .status(500)
-      .json({ error: "Произошла ошибка при добавлении комментария" });
+    return next(err);
   }
 };

@@ -18,6 +18,6 @@ export const toggleLike: RequestHandler = async (req, res, next) => {
       return res.json({ message: "Лайк добавлен", like: newLike });
     }
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };

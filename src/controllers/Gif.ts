@@ -53,18 +53,16 @@ export const getAllGifs: RequestHandler = async (_, res, next) => {
     });
     return res.json({ data: gifs });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
 export const getGifById: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
   try {
-    // Изменено: Используйте findOne вместо findAll, чтобы получить одну запись
     const currentGif = await Gif.findOne({
       where: { id },
       include: [
-        // Добавлено: Запрос теперь включает модель User и Tag
         { model: User, attributes: ["nickname", "id", "avatar", "email"] },
         {
           model: Tag,
@@ -90,7 +88,7 @@ export const getGifById: RequestHandler = async (req, res, next) => {
 
     return res.json({ data: currentGif });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -110,7 +108,7 @@ export const createGif: RequestHandler = async (req, res, next) => {
     await createdGif.setTags(tags);
     return res.json({ data: createdGif });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 

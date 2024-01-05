@@ -9,7 +9,7 @@ export const getAllTags: RequestHandler = async (_, res, next) => {
     }
     return res.json(tags);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -19,6 +19,6 @@ export const createTag: RequestHandler = async (req, res, next) => {
     const tag = await Tag.create({ name });
     return res.json({ data: tag });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };

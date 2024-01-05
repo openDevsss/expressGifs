@@ -17,7 +17,7 @@ export const createUser: RequestHandler = async (req, res, next) => {
     });
     return res.json({ data: user });
   } catch (err) {
-    next(new BadRequestError("Произошла ошибка при регистрации"));
+    return next(new BadRequestError("Произошла ошибка при регистрации"));
   }
 };
 
@@ -28,7 +28,6 @@ export const loginUser: RequestHandler = async (req, res, next) => {
       email: email,
     },
   });
-  // check
   try {
     if (user) {
       const matched = await bcrypt.compare(password, user.password);
@@ -46,10 +45,10 @@ export const loginUser: RequestHandler = async (req, res, next) => {
         const { password, ...userData } = user.dataValues;
         res.send({ token, ...userData });
       } else {
-        next(new NotFoundError("Проверьте пароль"));
+        return next(new NotFoundError("Проверьте пароль"));
       }
     }
   } catch (err) {
-    next(new BadRequestError("Произошла ошибка при сравнении паролей"));
+    return next(new BadRequestError("Произошла ошибка при сравнении паролей"));
   }
 };

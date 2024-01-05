@@ -150,6 +150,6 @@ export const updateCurrentUser: RequestHandler = async (req, res, next) => {
     }
     return res.json(updatedUser);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };

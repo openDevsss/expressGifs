@@ -57,6 +57,6 @@ export const unsubscribeFromUser: RequestHandler = async (req, res, next) => {
 
     return res.json({ message: "Подписка успешно удалена" });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
