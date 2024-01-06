@@ -7,6 +7,7 @@ import { TagGifs } from "./TagGifs";
 import { User } from "./User";
 import { Like } from "./Like";
 import { Subscription } from "./Subscriptions";
+import { VerificationCode } from "./VerificationCode";
 
 const sequelize = new Sequelize({
   host: "localhost",
@@ -14,6 +15,7 @@ const sequelize = new Sequelize({
   dialect: "postgres",
   username: "postgres",
   password: "kirill",
+  logging: false,
 });
 
 sequelize.addModels([
@@ -25,6 +27,7 @@ sequelize.addModels([
   Comment,
   Like,
   Subscription,
+  VerificationCode,
 ]);
 
 export const initDb = async () => {
