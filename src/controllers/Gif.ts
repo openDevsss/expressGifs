@@ -50,6 +50,7 @@ export const getAllGifs: RequestHandler = async (_, res, next) => {
           ],
         },
       ],
+      order: [["createdAt", "DESC"]],
     });
     return res.json({ data: gifs });
   } catch (err) {
