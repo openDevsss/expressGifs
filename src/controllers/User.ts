@@ -6,6 +6,11 @@ import { Like } from "../models/Like";
 import { Tag } from "../models/Tag";
 import { Comment } from "../models/Comment";
 
+const userInclude = {
+  model: User,
+  attributes: ["id", "nickname", "avatar"],
+};
+
 export const getAllUsers: RequestHandler = async (_, res, next) => {
   try {
     const users = await User.findAll({
@@ -36,10 +41,6 @@ export const getAllUsers: RequestHandler = async (_, res, next) => {
   } catch (err) {
     next(err);
   }
-};
-const userInclude = {
-  model: User,
-  attributes: ["id", "nickname", "avatar"],
 };
 
 export const getUserById: RequestHandler = async (req, res, next) => {
@@ -112,6 +113,18 @@ export const getCurrentUser: RequestHandler = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { id },
+      include: [
+        {
+          association: "following",
+          attributes: ["followerId", "followeeId"],
+          include: [{ ...userInclude, as: "followee" }],
+        },
+        {
+          association: "followers",
+          attributes: ["followerId", "followeeId"],
+          include: [{ ...userInclude, as: "follower" }],
+        },
+      ],
     });
 
     if (!user) {
