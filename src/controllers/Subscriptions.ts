@@ -34,8 +34,8 @@ export const subscribeToUser: RequestHandler = async (req, res, next) => {
 };
 
 export const unsubscribeFromUser: RequestHandler = async (req, res, next) => {
-  const { followerId, followeeId } = req.body;
-
+  const { followeeId } = req.body;
+  const { id: followerId } = req.user;
   try {
     // Проверяем, существует ли подписка
     const existingSubscription = await Subscription.findOne({
