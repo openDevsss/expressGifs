@@ -7,7 +7,7 @@ import {
 
 const router = Router();
 
-router.post("/subscribe", authenticateUserToken, subscribeToUser);
+router.put("/subscribe", authenticateUserToken, subscribeToUser);
 router.post("/unsubscribe", authenticateUserToken, unsubscribeFromUser);
 
 export default router;
