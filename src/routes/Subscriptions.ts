@@ -8,6 +8,6 @@ import {
 const router = Router();
 
 router.put("/subscribe", authenticateUserToken, subscribeToUser);
-router.post("/unsubscribe", authenticateUserToken, unsubscribeFromUser);
+router.put("/unsubscribe", authenticateUserToken, unsubscribeFromUser);
 
 export default router;
