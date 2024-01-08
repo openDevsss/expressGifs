@@ -56,7 +56,10 @@ export const unsubscribeFromUser: RequestHandler = async (req, res, next) => {
     // Обновляем количество подписчиков для пользователя
     await User.decrement("followers", { by: 1, where: { id: followeeId } });
 
-    return res.json({ message: "Подписка успешно удалена" });
+    return res.json({
+      message: "Подписка успешно удалена",
+      existingSubscription,
+    });
   } catch (error) {
     return next(error);
   }
