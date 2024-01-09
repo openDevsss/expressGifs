@@ -2,8 +2,6 @@ import bcrypt from "bcryptjs";
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
-import { BadRequestError } from "../utils/errors/bad-request-err";
-import { NotFoundError } from "../utils/errors/not-found-err";
 
 export const createUser: RequestHandler = async (req, res, next) => {
   const { nickname, password, email, role_id } = req.body;
@@ -17,38 +15,42 @@ export const createUser: RequestHandler = async (req, res, next) => {
     });
     return res.json({ data: user });
   } catch (err) {
-    return next(new BadRequestError("Произошла ошибка при регистрации"));
+    return next(err);
   }
 };
 
 export const loginUser: RequestHandler = async (req, res, next) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({
-    where: {
-      email: email,
-    },
-  });
   try {
-    if (user) {
-      const matched = await bcrypt.compare(password, user.password);
-      if (matched) {
-        const secretKey = process.env.JWT_SECRET || "default-secret-key";
-        const token = jwt.sign(
-          {
-            id: user.id,
-            email: user.email,
-            nickname: user.nickname,
-            roleId: user.role_id,
-          },
-          secretKey
-        );
-        const { password, ...userData } = user.dataValues;
-        res.send({ token, ...userData });
-      } else {
-        return next(new NotFoundError("Проверьте пароль"));
-      }
+    const { email, password } = req.body;
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) {
+      return res.status(401).json({ message: "Неверные учетные данные" });
+    }
+
+    const matched = await bcrypt.compare(password, user.password);
+
+    if (matched) {
+      const secretKey = process.env.JWT_SECRET || "default-secret-key";
+      const token = jwt.sign(
+        {
+          id: user.id,
+          email: user.email,
+          nickname: user.nickname,
+          roleId: user.role_id,
+        },
+        secretKey
+      );
+      const { password, ...userData } = user.dataValues;
+      res.send({ token, ...userData });
+    } else {
+      return res.status(401).json({ message: "Неверные учетные данные" });
     }
   } catch (err) {
-    return next(new BadRequestError("Произошла ошибка при сравнении паролей"));
+    return next(err);
   }
 };
