@@ -6,7 +6,6 @@ import express, { Express, Request, Response } from "express";
 import { createUser, loginUser } from "./controllers/Auth";
 import handleError from "./middlewares/sendError";
 import { initDb } from "./models";
-import { User } from "./models/User";
 import { router } from "./routes/index";
 import { uploadGif } from "./controllers/Gif";
 dotenv.config();
@@ -24,10 +23,15 @@ app.use("/", router);
 
 router.post("/upload", uploadGif, (req, res) => {
   if (!req.file) {
+    console.error("No file uploaded.");
     return res.status(400).json({ message: "No file uploaded." });
   }
+
   const filePath = req.file.path;
-  return res.json({ message: "File uploaded successfully.", filePath });
+  console.log("File uploaded successfully. Path:", filePath);
+  return res
+    .status(201)
+    .json({ message: "File uploaded successfully.", filePath });
 });
 
 initDb();
