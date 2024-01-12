@@ -130,3 +130,20 @@ export const deleteGifById: RequestHandler = async (req, res, next) => {
   }
   return next();
 };
+
+export const updateGifById: RequestHandler = async (req, res, next) => {
+  const { id, tags, title, description } = req.body;
+
+  try {
+    const [rowsUpdated, [updatedGif]] = await Gif.update(
+      { tags, title, description },
+      { where: { id }, returning: true }
+    );
+    if (rowsUpdated === 0 || !updatedGif) {
+      return res.json({ message: "Ошибка при изменении гифки" });
+    }
+    return res.json(updatedGif);
+  } catch (err) {
+    return next(err);
+  }
+};

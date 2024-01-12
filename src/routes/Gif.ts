@@ -4,6 +4,7 @@ import {
   deleteGifById,
   getAllGifs,
   getGifById,
+  updateGifById,
 } from "../controllers/Gif";
 import { authenticateUserToken } from "../middlewares/auth";
 
@@ -11,6 +12,7 @@ const router = Router();
 
 router.get("/", getAllGifs);
 router.post("/", authenticateUserToken, createGif);
+router.patch("/", authenticateUserToken, updateGifById);
 router.delete("/:id", authenticateUserToken, deleteGifById);
 router.get("/:id", getGifById);
 
