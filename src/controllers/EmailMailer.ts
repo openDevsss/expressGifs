@@ -20,16 +20,21 @@ async function sendVerificationCode(email: string, code: string) {
 }
 
 export const getEmailCode: RequestHandler = async (req, res, next) => {
-  const { id: userId, email } = req.user;
-  const verificationCode = generateCodeEmail();
+  try {
+    const { id: userId, email } = req.user;
+    const verificationCode = generateCodeEmail();
 
-  // Сохраните код в базе данных или в кеше, связав его с пользователем
-  await VerificationCode.create({
-    code: verificationCode,
-    userId,
-  });
-  // Отправьте код на почту
-  await sendVerificationCode(email, verificationCode);
+    // Save the code to the database or cache, associating it with the user
+    await VerificationCode.create({
+      code: verificationCode,
+      userId,
+    });
 
-  return res.json({ message: "Verification code sent!" });
+    // Send the code to the email
+    await sendVerificationCode(email, verificationCode);
+
+    return res.json({ message: "Verification code sent!" });
+  } catch (error) {
+    return next;
+  }
 };

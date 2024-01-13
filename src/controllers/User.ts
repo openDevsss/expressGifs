@@ -39,7 +39,7 @@ export const getAllUsers: RequestHandler = async (_, res, next) => {
     }
     return res.json({ data: users });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -100,10 +100,11 @@ export const getUserById: RequestHandler = async (req, res, next) => {
       return res.json({ message: `Пользователя с id ${id} не существует` });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userData } = user.toJSON();
     return res.json({ user: userData });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -139,14 +140,15 @@ export const getCurrentUser: RequestHandler = async (req, res, next) => {
         nickname: user.nickname,
         roleId: user.role_id,
       },
-      secretKey
+      secretKey,
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userData } = user.get();
 
     return res.json({ ...userData, token });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -156,7 +158,7 @@ export const updateCurrentUser: RequestHandler = async (req, res, next) => {
   try {
     const [rowsUpdated, [updatedUser]] = await User.update(
       { nickname, avatar, email },
-      { where: { id }, returning: true }
+      { where: { id }, returning: true },
     );
     if (rowsUpdated === 0 || !updatedUser) {
       return res.json({ message: "Ошибка при обновлении аккаунта" });

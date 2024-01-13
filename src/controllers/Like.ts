@@ -12,11 +12,10 @@ export const toggleLike: RequestHandler = async (req, res, next) => {
       // Если лайк существует, удаляем его
       await Like.destroy({ where: { userId, gifId } });
       return res.json({ message: "Лайк удален" });
-    } else {
-      // Если лайка нет, добавляем новый
-      const newLike = await Like.create({ userId, gifId });
-      return res.json({ message: "Лайк добавлен", like: newLike });
     }
+    // Если лайка нет, добавляем новый
+    const newLike = await Like.create({ userId, gifId });
+    return res.json({ message: "Лайк добавлен", like: newLike });
   } catch (err) {
     return next(err);
   }

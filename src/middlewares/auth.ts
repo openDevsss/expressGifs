@@ -6,9 +6,9 @@ import { UnathorizatedError } from "../utils/errors/unauthorizted-err";
 export const authenticateUserToken = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  const authHeader: string = req.headers["authorization"]!;
+  const authHeader: string = req.headers.authorization!;
   const token: string = authHeader && authHeader.split(" ")[1];
   let payload;
   try {

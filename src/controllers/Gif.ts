@@ -1,7 +1,7 @@
-import express from "express";
+import { RequestHandler } from "express";
 import multer from "multer";
 import path from "path";
-import { RequestHandler } from "express";
+
 import { Comment } from "../models/Comment";
 import { Gif } from "../models/Gif";
 import { Tag } from "../models/Tag";
@@ -10,17 +10,17 @@ import { BadRequestError } from "../utils/errors/bad-request-err";
 import { Like } from "../models/Like";
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination(req, file, cb) {
     cb(null, "uploads/");
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+  filename(req, file, cb) {
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     const ext = path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+    cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 export const uploadGif: RequestHandler = upload.single("gif");
 
@@ -137,7 +137,7 @@ export const updateGifById: RequestHandler = async (req, res, next) => {
   try {
     const [rowsUpdated, [updatedGif]] = await Gif.update(
       { tags, title, description },
-      { where: { id }, returning: true }
+      { where: { id }, returning: true },
     );
     if (rowsUpdated === 0 || !updatedGif) {
       return res.json({ message: "Ошибка при изменении гифки" });

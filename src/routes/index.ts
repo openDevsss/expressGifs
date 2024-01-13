@@ -6,6 +6,7 @@ import userRoutes from "./User";
 import likeRoutes from "./Like";
 import subscribeRoutes from "./Subscriptions";
 import mailRoutes from "./EmailMailer";
+
 const router = Router();
 
 router.use("/gifs", gifRoutes);

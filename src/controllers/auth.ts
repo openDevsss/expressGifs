@@ -6,7 +6,7 @@ import { User } from "../models/User";
 export const createUser: RequestHandler = async (req, res, next) => {
   const { nickname, password, email, role_id } = req.body;
   try {
-    let hashPassword = await bcrypt.hash(password, 12);
+    const hashPassword = await bcrypt.hash(password, 12);
     const user = await User.create({
       role_id,
       nickname,
@@ -24,7 +24,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({
       where: {
-        email: email,
+        email,
       },
     });
 
@@ -43,13 +43,13 @@ export const loginUser: RequestHandler = async (req, res, next) => {
           nickname: user.nickname,
           roleId: user.role_id,
         },
-        secretKey
+        secretKey,
       );
+      // eslint-disable-next-line no-shadow, @typescript-eslint/no-unused-vars
       const { password, ...userData } = user.dataValues;
-      res.send({ token, ...userData });
-    } else {
-      return res.status(401).json({ message: "Неверные учетные данные" });
+      return res.send({ token, ...userData });
     }
+    return res.status(401).json({ message: "Неверные учетные данные" });
   } catch (err) {
     return next(err);
   }

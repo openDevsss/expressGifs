@@ -30,7 +30,7 @@ export const subscribeToUser: RequestHandler = async (req, res, next) => {
       .status(201)
       .json({ message: "Подписка успешно создана", subscription });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
