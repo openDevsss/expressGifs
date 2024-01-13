@@ -1,13 +1,12 @@
-import express from "express";
+import { RequestHandler } from "express";
 import multer from "multer";
 import path from "path";
-import { RequestHandler } from "express";
 import { Comment } from "../models/Comment";
 import { Gif } from "../models/Gif";
+import { Like } from "../models/Like";
 import { Tag } from "../models/Tag";
 import { User } from "../models/User";
 import { BadRequestError } from "../utils/errors/bad-request-err";
-import { Like } from "../models/Like";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -108,7 +107,7 @@ export const createGif: RequestHandler = async (req, res, next) => {
       userId: id,
     });
     if (!createGif) {
-      return res.json({ message: "Ошибка при создании гифки" });
+      return res.json({ message: "Error creating the GIF" });
     }
     await createdGif.setTags(tags);
     return res.json({ data: createdGif });
@@ -123,10 +122,10 @@ export const deleteGifById: RequestHandler = async (req, res, next) => {
   if (gif) {
     await gif.destroy();
     res.json({
-      message: `товар с id ${id} успешно удален`,
+      message: `The item with id ${id} has been successfully deleted.`,
     });
   } else {
-    return next(new BadRequestError(`товара с id ${id} не существует`));
+    return next(new BadRequestError(`The item with ID ${id} does not exist.`));
   }
   return next();
 };
@@ -140,7 +139,7 @@ export const updateGifById: RequestHandler = async (req, res, next) => {
       { where: { id }, returning: true }
     );
     if (rowsUpdated === 0 || !updatedGif) {
-      return res.json({ message: "Ошибка при изменении гифки" });
+      return res.json({ message: "Error while modifying the GIF." });
     }
     return res.json(updatedGif);
   } catch (err) {

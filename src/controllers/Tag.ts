@@ -5,7 +5,7 @@ export const getAllTags: RequestHandler = async (_, res, next) => {
   try {
     const tags = await Tag.findAll({});
     if (!tags) {
-      return res.json({ message: "Ошибка при получении всех картчоек" });
+      return res.json({ message: "Error fetching all cards" });
     }
     return res.json(tags);
   } catch (err) {

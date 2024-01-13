@@ -1,7 +1,7 @@
 // controllers/subscriptionController.ts
 import { RequestHandler } from "express";
-import { User } from "../models/User";
 import { Subscription } from "../models/Subscriptions";
+import { User } from "../models/User";
 
 export const subscribeToUser: RequestHandler = async (req, res, next) => {
   const { followeeId } = req.body;
@@ -14,7 +14,9 @@ export const subscribeToUser: RequestHandler = async (req, res, next) => {
     });
 
     if (existingSubscription) {
-      return res.status(400).json({ error: "Подписка уже существует" });
+      return res
+        .status(400)
+        .json({ error: "The subscription already exists." });
     }
 
     // Создаем новую подписку
@@ -26,9 +28,10 @@ export const subscribeToUser: RequestHandler = async (req, res, next) => {
     // Обновляем количество подписчиков для пользователя
     await User.increment("followers", { by: 1, where: { id: followeeId } });
 
-    return res
-      .status(201)
-      .json({ message: "Подписка успешно создана", subscription });
+    return res.status(201).json({
+      message: "The subscription has been successfully created.",
+      subscription,
+    });
   } catch (error) {
     next(error);
   }
@@ -44,7 +47,9 @@ export const unsubscribeFromUser: RequestHandler = async (req, res, next) => {
     });
 
     if (!existingSubscription) {
-      return res.status(400).json({ error: "Подписка не существует" });
+      return res
+        .status(400)
+        .json({ error: "The subscription does not exist." });
     }
 
     // Удаляем подписку
@@ -57,7 +62,7 @@ export const unsubscribeFromUser: RequestHandler = async (req, res, next) => {
     await User.decrement("followers", { by: 1, where: { id: followeeId } });
 
     return res.json({
-      message: "Подписка успешно удалена",
+      message: "The subscription has been successfully deleted",
       existingSubscription,
     });
   } catch (error) {
