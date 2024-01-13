@@ -4,10 +4,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
 import { createUser, loginUser } from "./controllers/Auth";
+import { uploadGif } from "./controllers/Gif";
 import handleError from "./middlewares/sendError";
 import { initDb } from "./models";
 import { router } from "./routes/index";
-import { uploadGif } from "./controllers/Gif";
 
 dotenv.config();
 

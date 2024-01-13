@@ -21,7 +21,7 @@ export const addCommentForGif: RequestHandler = async (req, res, next) => {
     };
 
     return res.status(201).json({
-      message: "Вы успешно оставили свой комментарий",
+      message: "You have successfully left your comment",
       data: responseData,
     });
   } catch (err) {

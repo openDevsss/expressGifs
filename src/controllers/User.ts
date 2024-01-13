@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
-import { User } from "../models/User";
+import { Comment } from "../models/Comment";
 import { Gif } from "../models/Gif";
 import { Like } from "../models/Like";
 import { Tag } from "../models/Tag";
-import { Comment } from "../models/Comment";
+import { User } from "../models/User";
 
 const userInclude = {
   model: User,
@@ -161,7 +161,7 @@ export const updateCurrentUser: RequestHandler = async (req, res, next) => {
       { where: { id }, returning: true },
     );
     if (rowsUpdated === 0 || !updatedUser) {
-      return res.json({ message: "Ошибка при обновлении аккаунта" });
+      return res.json({ message: "Error updating the account" });
     }
     return res.json(updatedUser);
   } catch (err) {

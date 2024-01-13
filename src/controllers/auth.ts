@@ -29,7 +29,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
     });
 
     if (!user) {
-      return res.status(401).json({ message: "Неверные учетные данные" });
+      return res.status(401).json({ message: "Incorrect credentials" });
     }
 
     const matched = await bcrypt.compare(password, user.password);
@@ -47,7 +47,9 @@ export const loginUser: RequestHandler = async (req, res, next) => {
       );
       // eslint-disable-next-line no-shadow, @typescript-eslint/no-unused-vars
       const { password, ...userData } = user.dataValues;
-      return res.send({ token, ...userData });
+      res.send({ token, ...userData });
+    } else {
+      return res.status(401).json({ message: "Incorrect credentials" });
     }
     return res.status(401).json({ message: "Неверные учетные данные" });
   } catch (err) {
