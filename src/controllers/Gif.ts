@@ -134,14 +134,15 @@ export const updateGifById: RequestHandler = async (req, res, next) => {
   const { id, tags, title, description } = req.body;
 
   try {
-    const [rowsUpdated, [updatedGif]] = await Gif.update(
-      { tags, title, description },
-      { where: { id }, returning: true },
-    );
-    if (rowsUpdated === 0 || !updatedGif) {
-      return res.json({ message: "Error while modifying the GIF." });
+    const gifToUpdate = await Gif.findByPk(id);
+    if (!gifToUpdate) {
+      return res.json({ id, message: "GIF not found." });
     }
-    return res.json(updatedGif);
+    await gifToUpdate.update({ title, description });
+
+    await gifToUpdate.setTags(tags);
+
+    return res.json(gifToUpdate);
   } catch (err) {
     return next(err);
   }
