@@ -49,7 +49,9 @@ export const getUserById: RequestHandler = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { id },
-      attributes: { exclude: ["password"] },
+      attributes: {
+        exclude: ["password"],
+      },
       include: [
         {
           association: "following",
@@ -64,7 +66,9 @@ export const getUserById: RequestHandler = async (req, res, next) => {
         {
           model: Gif,
           as: "gifs",
-          attributes: { exclude: ["userId"] },
+          attributes: {
+            exclude: ["userId"],
+          },
           include: [
             {
               model: Tag,
@@ -100,9 +104,7 @@ export const getUserById: RequestHandler = async (req, res, next) => {
       return res.json({ message: `Пользователя с id ${id} не существует` });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userData } = user.toJSON();
-    return res.json({ user: userData });
+    return res.json({ user });
   } catch (err) {
     return next(err);
   }
