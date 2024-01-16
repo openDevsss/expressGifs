@@ -66,7 +66,7 @@ export class Gif extends Model {
   tags!: [Tag];
 
   @HasMany(() => Comment)
-  comment!: Comment;
+  comments!: Comment;
 
   @HasMany(() => Like)
   likes!: Like[];
