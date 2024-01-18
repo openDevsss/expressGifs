@@ -81,6 +81,13 @@ export const getGifById: RequestHandler = async (req, res, next) => {
           attributes: ["id", "comment_text", "createdAt"],
           include: [{ model: User, attributes: ["id", "nickname", "avatar"] }],
         },
+        {
+          model: Like,
+          attributes: ["id"],
+          include: [
+            { model: User, attributes: ["nickname", "id", "avatar", "email"] },
+          ],
+        },
       ],
     });
 
