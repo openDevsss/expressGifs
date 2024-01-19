@@ -23,36 +23,34 @@ const upload = multer({ storage });
 
 export const uploadGif: RequestHandler = upload.single("gif");
 
+const commonInclude = [
+  { model: User, attributes: ["nickname", "id", "avatar", "email"] },
+  {
+    model: Tag,
+    attributes: ["id", "name"],
+    through: {
+      as: "TagGifs",
+      attributes: [],
+    },
+  },
+  {
+    model: Comment,
+    attributes: ["id", "comment_text", "createdAt"],
+    include: [{ model: User, attributes: ["id", "nickname", "avatar"] }],
+  },
+  {
+    model: Like,
+    attributes: ["id"],
+    include: [
+      { model: User, attributes: ["nickname", "id", "avatar", "email"] },
+    ],
+  },
+];
+
 export const getAllGifs: RequestHandler = async (_, res, next) => {
   try {
     const gifs = await Gif.findAll({
-      include: [
-        { model: User, attributes: ["nickname", "id", "avatar", "email"] },
-        {
-          model: Tag,
-          attributes: ["id", "name"],
-          through: {
-            as: "TagGifs",
-            attributes: [],
-          },
-        },
-        {
-          model: Comment,
-          attributes: ["id", "comment_text", "createdAt"],
-          include: [{ model: User, attributes: ["id", "nickname", "avatar"] }],
-          order: [
-            ["createdAt", "ASC"],
-            ["id", "ASC"],
-          ],
-        },
-        {
-          model: Like,
-          attributes: ["id"],
-          include: [
-            { model: User, attributes: ["nickname", "id", "avatar", "email"] },
-          ],
-        },
-      ],
+      include: [...commonInclude],
       order: [["createdAt", "DESC"]],
     });
     return res.json({ data: gifs });
@@ -66,22 +64,7 @@ export const getGifById: RequestHandler = async (req, res, next) => {
   try {
     const currentGif = await Gif.findOne({
       where: { id },
-      include: [
-        { model: User, attributes: ["nickname", "id", "avatar", "email"] },
-        {
-          model: Tag,
-          attributes: ["id", "name"],
-          through: {
-            as: "TagGifs",
-            attributes: [],
-          },
-        },
-        {
-          model: Comment,
-          attributes: ["id", "comment_text", "createdAt"],
-          include: [{ model: User, attributes: ["id", "nickname", "avatar"] }],
-        },
-      ],
+      include: [...commonInclude],
     });
 
     if (!currentGif) {
