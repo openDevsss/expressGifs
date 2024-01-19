@@ -36,6 +36,7 @@ router.post("/upload", uploadGif, (req, res) => {
 });
 
 initDb();
+
 app.use(handleError);
 
 app.listen(port, () => {

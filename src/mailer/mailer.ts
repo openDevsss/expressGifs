@@ -1,14 +1,18 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.yandex.ru",
-  service: "Yandex",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "gifsproject@yandex.ru",
-    pass: "openDevsssfcngrant",
-    accessToken: "mfwcdewnyrghrzoj",
-  },
-});
-export default transporter;
+async function createTransporter() {
+  const testAccount = await nodemailer.createTestAccount();
+  const transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    secure: false,
+    auth: {
+      user: testAccount.user,
+      pass: testAccount.pass,
+    },
+  });
+
+  return transporter;
+}
+
+export default createTransporter;
