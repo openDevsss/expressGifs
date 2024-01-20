@@ -11,7 +11,7 @@ export const toggleLike: RequestHandler = async (req, res, next) => {
     if (existingLike) {
       // Если лайк существует, удаляем его
       await Like.destroy({ where: { userId, gifId } });
-      return res.json({ message: "Like deleted" });
+      return res.json({ message: "Like deleted", like: existingLike });
     }
     // Если лайка нет, добавляем новый
     const newLike = await Like.create({ userId, gifId });
