@@ -3,6 +3,7 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
+import helmet from "helmet";
 import { createUser, loginUser } from "./controllers/Auth";
 import { uploadGif } from "./controllers/Gif";
 import handleError from "./middlewares/sendError";
@@ -14,6 +15,7 @@ dotenv.config();
 const port = process.env.PORT;
 const app: Express = express();
 
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
