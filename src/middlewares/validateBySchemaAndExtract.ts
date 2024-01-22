@@ -2,7 +2,7 @@ import type { Schema } from "express-validator";
 import {
   ExtractValidatedDataOptions,
   extractValidatedData,
-} from "./ValidateWithRequestData";
+} from "./validateWithRequestData";
 import { validateBySchema } from "./validateBySchema";
 
 export const validateBySchemaAndExtract = (

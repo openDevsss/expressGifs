@@ -6,7 +6,7 @@ import { Gif } from "../../models/Gif";
 import { Like } from "../../models/Like";
 import { Tag } from "../../models/Tag";
 import { User } from "../../models/User";
-import { RequestWithValidatedData } from "../../middlewares/ValidateWithRequestData";
+import { RequestWithValidatedData } from "../../middlewares/validateWithRequestData";
 import { GetGifsSchema } from "./GifSchema";
 
 const storage = multer.diskStorage({
