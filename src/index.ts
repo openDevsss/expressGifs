@@ -9,9 +9,14 @@ import { uploadGif } from "./controllers/Gif/Gif";
 import handleError from "./middlewares/sendError";
 import { initDb } from "./models";
 import { router } from "./routes/index";
-import validateErrorsHandler from "./utils/handleValidateSchema";
+import validateErrorsHandler from "./middlewares/handleValidateSchema";
 
 dotenv.config();
+
+if (!process.env.PORT) {
+  console.error("Ошибка: переменная окружения PORT не установлена.");
+  process.exit(1);
+}
 
 const port = process.env.PORT;
 const app: Express = express();
@@ -19,9 +24,11 @@ const app: Express = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use(validateErrorsHandler);
+
 app.post("/sign-up", createUser);
 app.post("/sign-in", loginUser);
+
+app.use(validateErrorsHandler);
 
 app.use("/", router);
 

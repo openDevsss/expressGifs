@@ -6,7 +6,7 @@ import { Gif } from "../../models/Gif";
 import { Like } from "../../models/Like";
 import { Tag } from "../../models/Tag";
 import { User } from "../../models/User";
-import { RequestWithValidatedData } from "../../utils/ValidateWithRequestData";
+import { RequestWithValidatedData } from "../../middlewares/ValidateWithRequestData";
 import { GetGifsSchema } from "./GifSchema";
 
 const storage = multer.diskStorage({
@@ -89,7 +89,7 @@ export const getGifById: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const createGif: RequestHandler = async (req, res, next) => {
+export const createGif: RequestHandler = async (req, res) => {
   const { title, description, url, tags } = req.body;
   const { id } = req.user;
   try {
@@ -105,22 +105,26 @@ export const createGif: RequestHandler = async (req, res, next) => {
     await createdGif.setTags(tags);
     return res.json({ data: createdGif });
   } catch (err) {
-    return next(err);
+    return res.json({ message: err });
   }
 };
 
-export const deleteGifById: RequestHandler = async (req, res, next) => {
+export const deleteGifById: RequestHandler = async (req, res) => {
   const { id } = req.params;
-  const gif = await Gif.findByPk(id);
-  if (gif) {
-    await gif.destroy();
-    res.json({
-      message: `The item with id ${id} has been successfully deleted.`,
+  try {
+    const gif = await Gif.findByPk(id);
+    if (gif) {
+      await gif.destroy();
+      return res.json({
+        message: `The item with id ${id} has been successfully deleted.`,
+      });
+    }
+    return res.status(404).json({
+      message: `Item with id ${id} not found.`,
     });
-  } else {
-    return next(new BadRequestError(`The item with ID ${id} does not exist.`));
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
   }
-  return next();
 };
 
 export const updateGifById: RequestHandler = async (req, res, next) => {
