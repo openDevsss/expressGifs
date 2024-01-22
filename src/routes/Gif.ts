@@ -5,7 +5,7 @@ import {
   getAllGifs,
   getGifById,
   updateGifById,
-} from "../controllers/Gif";
+} from "../controllers/Gif/Gif";
 import { authenticateUserToken } from "../middlewares/auth";
 
 const router = Router();

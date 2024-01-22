@@ -1,12 +1,13 @@
 import { RequestHandler } from "express";
 import multer from "multer";
 import path from "path";
-import { Comment } from "../models/Comment";
-import { Gif } from "../models/Gif";
-import { Like } from "../models/Like";
-import { Tag } from "../models/Tag";
-import { User } from "../models/User";
-import { BadRequestError } from "../utils/errors/bad-request-err";
+import { Comment } from "../../models/Comment";
+import { Gif } from "../../models/Gif";
+import { Like } from "../../models/Like";
+import { Tag } from "../../models/Tag";
+import { User } from "../../models/User";
+import { RequestWithValidatedData } from "../../utils/ValidateWithRequestData";
+import { GetGifsSchema } from "./GifSchema";
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -47,13 +48,22 @@ const commonInclude = [
   },
 ];
 
-export const getAllGifs: RequestHandler = async (_, res, next) => {
+export const getAllGifs: RequestHandler = async (
+  req: RequestWithValidatedData<GetGifsSchema>,
+  res,
+  next,
+) => {
+  const { page = 1, pageSize = 10 } = req.validatedData;
+
   try {
-    const gifs = await Gif.findAll({
+    const { rows: gifs, count } = await Gif.findAndCountAll({
       include: [...commonInclude],
       order: [["createdAt", "DESC"]],
+      offset: (page - 1) * pageSize,
+      limit: pageSize,
     });
-    return res.json({ data: gifs });
+
+    return res.json({ data: gifs, count });
   } catch (err) {
     return next(err);
   }
