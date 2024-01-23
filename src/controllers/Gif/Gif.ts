@@ -51,96 +51,76 @@ const commonInclude = [
 export const getAllGifs: RequestHandler = async (
   req: RequestWithValidatedData<GetGifsSchema>,
   res,
-  next,
 ) => {
   const { page = 1, pageSize = 10 } = req.validatedData;
 
-  try {
-    const { rows: gifs, count } = await Gif.findAndCountAll({
-      include: [...commonInclude],
-      order: [["createdAt", "DESC"]],
-      offset: (page - 1) * pageSize,
-      limit: pageSize,
-    });
+  const { rows: gifs, count } = await Gif.findAndCountAll({
+    include: [...commonInclude],
+    order: [["createdAt", "DESC"]],
+    offset: (page - 1) * pageSize,
+    limit: pageSize,
+  });
 
-    return res.json({ data: gifs, count });
-  } catch (err) {
-    return next(err);
-  }
+  return res.json({ data: gifs, count });
 };
 
-export const getGifById: RequestHandler = async (req, res, next) => {
+export const getGifById: RequestHandler = async (req, res) => {
   const { id } = req.params;
-  try {
-    const currentGif = await Gif.findOne({
-      where: { id },
-      include: [...commonInclude],
-    });
+  const currentGif = await Gif.findOne({
+    where: { id },
+    include: [...commonInclude],
+  });
 
-    if (!currentGif) {
-      return res.json({ message: `Гифки с id ${id} не найдено` });
-    }
-
-    await currentGif.increment("viewers", { by: 1 });
-
-    return res.json({ data: currentGif });
-  } catch (err) {
-    return next(err);
+  if (!currentGif) {
+    return res.json({ message: `Гифки с id ${id} не найдено` });
   }
+
+  await currentGif.increment("viewers", { by: 1 });
+
+  return res.json({ data: currentGif });
 };
 
 export const createGif: RequestHandler = async (req, res) => {
   const { title, description, url, tags } = req.body;
   const { id } = req.user;
-  try {
-    const createdGif = await Gif.create({
-      title,
-      description,
-      url,
-      userId: id,
-    });
-    if (!createGif) {
-      return res.json({ message: "Error creating the GIF" });
-    }
-    await createdGif.setTags(tags);
-    return res.json({ data: createdGif });
-  } catch (err) {
-    return res.json({ message: err });
+  const createdGif = await Gif.create({
+    title,
+    description,
+    url,
+    userId: id,
+  });
+  if (!createGif) {
+    return res.json({ message: "Error creating the GIF" });
   }
+  await createdGif.setTags(tags);
+  return res.json({ data: createdGif });
 };
 
 export const deleteGifById: RequestHandler = async (req, res) => {
   const { id } = req.params;
-  try {
-    const gif = await Gif.findByPk(id);
-    if (gif) {
-      await gif.destroy();
-      return res.json({
-        message: `The item with id ${id} has been successfully deleted.`,
-      });
-    }
-    return res.status(404).json({
-      message: `Item with id ${id} not found.`,
+
+  const gif = await Gif.findByPk(id);
+  if (gif) {
+    await gif.destroy();
+    return res.json({
+      message: `The item with id ${id} has been successfully deleted.`,
     });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
   }
+  return res.status(404).json({
+    message: `Item with id ${id} not found.`,
+  });
 };
 
-export const updateGifById: RequestHandler = async (req, res, next) => {
+export const updateGifById: RequestHandler = async (req, res) => {
   const { id, tags, title, description } = req.body;
 
-  try {
-    const gifToUpdate = await Gif.findByPk(id);
-    if (!gifToUpdate) {
-      return res.json({ id, message: "GIF not found." });
-    }
-    await gifToUpdate.update({ title, description });
-
-    await gifToUpdate.setTags(tags);
-
-    return res.json(gifToUpdate);
-  } catch (err) {
-    return next(err);
+  const gifToUpdate = await Gif.findByPk(id);
+  if (!gifToUpdate) {
+    return res.json({ id, message: "GIF not found." });
   }
+  await gifToUpdate.update({ title, description });
+
+  await gifToUpdate.setTags(tags);
+
+  return res.json(gifToUpdate);
 };

@@ -110,63 +110,56 @@ export const getUserById: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const getCurrentUser: RequestHandler = async (req, res, next) => {
+export const getCurrentUser: RequestHandler = async (req, res) => {
   const { id } = req.user;
 
-  try {
-    const user = await User.findOne({
-      where: { id },
-      include: [
-        {
-          association: "following",
-          attributes: ["followerId", "followeeId"],
-          include: [{ ...userInclude, as: "followee" }],
-        },
-        {
-          association: "followers",
-          attributes: ["followerId", "followeeId"],
-          include: [{ ...userInclude, as: "follower" }],
-        },
-      ],
-    });
-
-    if (!user) {
-      return res.json({ message: `Пользователя с id ${id} не существует` });
-    }
-
-    const secretKey = process.env.JWT_SECRET || "default-secret-key";
-    const token = jwt.sign(
+  const user = await User.findOne({
+    where: { id },
+    include: [
       {
-        id: user.id,
-        email: user.email,
-        nickname: user.nickname,
-        roleId: user.role_id,
+        association: "following",
+        attributes: ["followerId", "followeeId"],
+        include: [{ ...userInclude, as: "followee" }],
       },
-      secretKey,
-    );
+      {
+        association: "followers",
+        attributes: ["followerId", "followeeId"],
+        include: [{ ...userInclude, as: "follower" }],
+      },
+    ],
+  });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userData } = user.get();
-
-    return res.json({ ...userData, token });
-  } catch (err) {
-    return next(err);
+  if (!user) {
+    return res.json({ message: `Пользователя с id ${id} не существует` });
   }
+
+  const secretKey = process.env.JWT_SECRET || "default-secret-key";
+  const token = jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      nickname: user.nickname,
+      roleId: user.role_id,
+    },
+    secretKey,
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password, ...userData } = user.get();
+
+  return res.json({ ...userData, token });
 };
 
-export const updateCurrentUser: RequestHandler = async (req, res, next) => {
+export const updateCurrentUser: RequestHandler = async (req, res) => {
   const { id } = req.user;
   const { nickname, avatar, email } = req.body;
-  try {
-    const [rowsUpdated, [updatedUser]] = await User.update(
-      { nickname, avatar, email },
-      { where: { id }, returning: true },
-    );
-    if (rowsUpdated === 0 || !updatedUser) {
-      return res.json({ message: "Error updating the account" });
-    }
-    return res.json(updatedUser);
-  } catch (err) {
-    return next(err);
+
+  const [rowsUpdated, [updatedUser]] = await User.update(
+    { nickname, avatar, email },
+    { where: { id }, returning: true },
+  );
+  if (rowsUpdated === 0 || !updatedUser) {
+    return res.json({ message: "Error updating the account" });
   }
+  return res.json(updatedUser);
 };

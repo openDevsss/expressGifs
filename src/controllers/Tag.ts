@@ -1,24 +1,17 @@
 import { RequestHandler } from "express";
 import { Tag } from "../models/Tag";
 
-export const getAllTags: RequestHandler = async (_, res, next) => {
-  try {
-    const tags = await Tag.findAll({});
-    if (!tags) {
-      return res.json({ message: "Error fetching all cards" });
-    }
-    return res.json(tags);
-  } catch (err) {
-    return next(err);
+export const getAllTags: RequestHandler = async (_, res) => {
+  const tags = await Tag.findAll({});
+  if (!tags) {
+    return res.json({ message: "Error fetching all cards" });
   }
+  return res.json(tags);
 };
 
-export const createTag: RequestHandler = async (req, res, next) => {
+export const createTag: RequestHandler = async (req, res) => {
   const { name } = req.body;
-  try {
-    const tag = await Tag.create({ name });
-    return res.json({ data: tag });
-  } catch (err) {
-    return next(err);
-  }
+
+  const tag = await Tag.create({ name });
+  return res.json({ data: tag });
 };

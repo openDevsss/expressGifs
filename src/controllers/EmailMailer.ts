@@ -17,27 +17,18 @@ async function sendVerificationCode(email: string, code: string) {
     text: `Your verification code is: ${code}`,
   };
 
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log("Verification code sent successfully.");
-  } catch (error) {
-    console.error("Error sending verification code:", error);
-  }
+  await transporter.sendMail(mailOptions);
 }
-export const getEmailCode: RequestHandler = async (req, res, next) => {
-  try {
-    const { id: userId } = req.user;
-    const verificationCode = generateCodeEmail();
+export const getEmailCode: RequestHandler = async (req, res) => {
+  const { id: userId } = req.user;
+  const verificationCode = generateCodeEmail();
 
-    await VerificationCode.create({
-      code: verificationCode,
-      userId,
-    });
+  await VerificationCode.create({
+    code: verificationCode,
+    userId,
+  });
 
-    await sendVerificationCode("zak2613s@yandex.ru", verificationCode);
+  await sendVerificationCode("zak2613s@yandex.ru", verificationCode);
 
-    return res.json({ message: "Verification code sent!" });
-  } catch (error) {
-    return next(error);
-  }
+  return res.json({ message: "Verification code sent!" });
 };

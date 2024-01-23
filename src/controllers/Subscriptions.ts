@@ -37,35 +37,30 @@ export const subscribeToUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const unsubscribeFromUser: RequestHandler = async (req, res, next) => {
+export const unsubscribeFromUser: RequestHandler = async (req, res) => {
   const { followeeId } = req.body;
   const { id: followerId } = req.user;
-  try {
-    // Проверяем, существует ли подписка
-    const existingSubscription = await Subscription.findOne({
-      where: { followerId, followeeId },
-    });
 
-    if (!existingSubscription) {
-      return res
-        .status(400)
-        .json({ error: "The subscription does not exist." });
-    }
+  // Проверяем, существует ли подписка
+  const existingSubscription = await Subscription.findOne({
+    where: { followerId, followeeId },
+  });
 
-    // Удаляем подписку
-    await existingSubscription.destroy();
-
-    // Обновляем количество подписок для подписчика
-    await User.decrement("following", { by: 1, where: { id: followerId } });
-
-    // Обновляем количество подписчиков для пользователя
-    await User.decrement("followers", { by: 1, where: { id: followeeId } });
-
-    return res.json({
-      message: "The subscription has been successfully deleted",
-      existingSubscription,
-    });
-  } catch (error) {
-    return next(error);
+  if (!existingSubscription) {
+    return res.status(400).json({ error: "The subscription does not exist." });
   }
+
+  // Удаляем подписку
+  await existingSubscription.destroy();
+
+  // Обновляем количество подписок для подписчика
+  await User.decrement("following", { by: 1, where: { id: followerId } });
+
+  // Обновляем количество подписчиков для пользователя
+  await User.decrement("followers", { by: 1, where: { id: followeeId } });
+
+  return res.json({
+    message: "The subscription has been successfully deleted",
+    existingSubscription,
+  });
 };
