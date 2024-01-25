@@ -14,7 +14,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.removeColumn(TABLE_NAME, "following");
     await queryInterface.removeColumn(TABLE_NAME, "followers");
   },

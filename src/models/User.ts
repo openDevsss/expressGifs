@@ -62,6 +62,36 @@ export class User extends Model {
   })
   isSuccess!: boolean;
 
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  phone!: number;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  lastName!: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  firstName!: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  location!: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  bio!: string;
+
   @ForeignKey(() => Role)
   @Column({
     type: DataType.BIGINT,

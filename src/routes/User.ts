@@ -4,7 +4,7 @@ import {
   getCurrentUser,
   getUserById,
   updateCurrentUser,
-} from "../controllers/User";
+} from "../controllers/User/User";
 import { authenticateUserToken } from "../middlewares/auth";
 
 const router = Router();

@@ -21,6 +21,11 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
     });
+
+    await queryInterface.addColumn(table, "bio", {
+      type: Sequelize.STRING,
+      allowNull: true,
+    });
   },
 
   async down(queryInterface) {
@@ -28,5 +33,6 @@ module.exports = {
     await queryInterface.removeColumn(table, "fullName");
     await queryInterface.removeColumn(table, "lastName");
     await queryInterface.removeColumn(table, "location");
+    await queryInterface.removeColumn(table, "bio");
   },
 };

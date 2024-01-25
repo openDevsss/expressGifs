@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
-import { Comment } from "../models/Comment";
-import { Gif } from "../models/Gif";
-import { Like } from "../models/Like";
-import { Tag } from "../models/Tag";
-import { User } from "../models/User";
+import { Comment } from "../../models/Comment";
+import { Gif } from "../../models/Gif";
+import { Like } from "../../models/Like";
+import { Tag } from "../../models/Tag";
+import { User } from "../../models/User";
 
 const userInclude = {
   model: User,
